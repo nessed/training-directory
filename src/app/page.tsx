@@ -6,10 +6,19 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-} from "@heroui/table";
-import { Chip } from "@heroui/chip";
-import { Button } from "@heroui/button";
+  Chip,
+  Button,
+  Input,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+} from "@heroui/react";
 import SearchBar from "@/components/SearchBar";
+import { EllipsisVertical } from 'lucide-react';
+
+import Image from "next/image";
+
 export default function Home() {
   const users = [
     {
@@ -18,7 +27,7 @@ export default function Home() {
       role: "CEO",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 2,
@@ -26,7 +35,7 @@ export default function Home() {
       role: "Director",
       status: "Paused",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 3,
@@ -34,7 +43,7 @@ export default function Home() {
       role: "Developer",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 4,
@@ -42,7 +51,7 @@ export default function Home() {
       role: "Manager",
       status: "Vacation",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 5,
@@ -50,7 +59,7 @@ export default function Home() {
       role: "Designer",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 6,
@@ -58,7 +67,7 @@ export default function Home() {
       role: "Intern",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 7,
@@ -66,7 +75,7 @@ export default function Home() {
       role: "Marketing Manager",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29027007d",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 8,
@@ -74,7 +83,7 @@ export default function Home() {
       role: "Sales Executive",
       status: "Paused",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29027008d",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 9,
@@ -82,7 +91,7 @@ export default function Home() {
       role: "HR Manager",
       status: "Vacation",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=4",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 10,
@@ -90,7 +99,7 @@ export default function Home() {
       role: "Software Engineer",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=5",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 11,
@@ -98,7 +107,7 @@ export default function Home() {
       role: "Product Manager",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=8",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 12,
@@ -106,7 +115,7 @@ export default function Home() {
       role: "Finance Head",
       status: "Paused",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=10",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 13,
@@ -114,7 +123,7 @@ export default function Home() {
       role: "Content Writer",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=12",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 14,
@@ -122,7 +131,7 @@ export default function Home() {
       role: "System Admin",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=16",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 15,
@@ -130,7 +139,7 @@ export default function Home() {
       role: "Quality Assurance",
       status: "Paused",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=15",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 16,
@@ -138,7 +147,7 @@ export default function Home() {
       role: "Support Engineer",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=20",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 17,
@@ -146,7 +155,7 @@ export default function Home() {
       role: "Security Officer",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=33",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 18,
@@ -154,7 +163,7 @@ export default function Home() {
       role: "IT Manager",
       status: "Vacation",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=29",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 19,
@@ -162,7 +171,7 @@ export default function Home() {
       role: "PR Executive",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=50",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 20,
@@ -170,7 +179,7 @@ export default function Home() {
       role: "Logistics Coordinator",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=45",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 21,
@@ -178,7 +187,7 @@ export default function Home() {
       role: "Developer",
       status: "Paused",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=2",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 22,
@@ -186,7 +195,7 @@ export default function Home() {
       role: "Project Manager",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=6",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 23,
@@ -194,7 +203,7 @@ export default function Home() {
       role: "UX Designer",
       status: "Vacation",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=14",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 24,
@@ -202,7 +211,7 @@ export default function Home() {
       role: "Operations Manager",
       status: "Active",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=13",
+      avatar: "/blank-profilepic.png", // Default avatar
     },
     {
       id: 25,
@@ -210,7 +219,7 @@ export default function Home() {
       role: "Research Analyst",
       status: "Paused",
       actions: "",
-      avatar: "https://i.pravatar.cc/150?img=18",
+      avatar: "/blank-profilepic", // Default avatar
     },
   ];
 
@@ -222,20 +231,30 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
-      <div className="w-full flex flex-row justify-end">
-        <Button>Add User</Button>
-        <SearchBar /></div>
-      
+    <div className="flex flex-col justify-center min-h-screen bg-white p-4">
+      <div className="w-full flex flex-row justify-end gap-2 p-1">
+        {/* <SearchBar /> */}
+        <Input placeholder="Search" />
+        <Button className="font-semibold">Status</Button>
+        <Button className="font-semibold">Columns</Button>
+        <Button className="bg-secondary text-white font-semibold">
+          Add User
+        </Button>
+      </div>
+      <div className="flex flex-row justify-between gap-2 text-gray-600 p-2">
+        <div className="">Total 20 users</div>
+        <div>Rows per page: 5</div>
+      </div>
+
       <Table className="shadow-lg rounded-lg w-full">
         <TableHeader className="font-bold w-screen ">
-          <TableColumn className="font-bold text-white bg-secondary ">
+          <TableColumn className="font-bold text-white bg-secondary">
             ID
           </TableColumn>
           <TableColumn className="font-bold text-white bg-secondary">
-            Avatar
+            AVATAR
           </TableColumn>
-          <TableColumn className="font-bold text-white bg-secondary ">
+          <TableColumn className="font-bold text-white bg-secondary">
             NAME
           </TableColumn>
           <TableColumn className="font-bold text-white bg-secondary">
@@ -248,6 +267,7 @@ export default function Home() {
             ACTIONS
           </TableColumn>
         </TableHeader>
+
         <TableBody>
           {users.map((user) => (
             <TableRow
@@ -255,13 +275,37 @@ export default function Home() {
               key={user.id}
             >
               <TableCell>{user.id}</TableCell>
-              <TableCell>{user.avatar}</TableCell>
+
+              {/* Render the Avatar using next/image */}
+              <TableCell>
+                <Image
+                  src={user.avatar} // Use the avatar URL (points to public/blank-profilepic.png)
+                  alt={`${user.name}'s Avatar`}
+                  width={40} // Width of the image
+                  height={40} // Height of the image
+                  className="rounded-full" // Optional: make the image circular
+                />
+              </TableCell>
+
               <TableCell className="font-sans">{user.name}</TableCell>
               <TableCell>{user.role}</TableCell>
               <TableCell>
                 <Chip color={getStatusColor(user.status)}>{user.status}</Chip>
               </TableCell>
-              <TableCell>{user.actions}</TableCell>
+              <TableCell>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button isIconOnly size="sm" variant="light">
+                      :{" "}
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu>
+                    <DropdownItem key="view">View</DropdownItem>
+                    <DropdownItem key="edit">Edit</DropdownItem>
+                    <DropdownItem key="delete">Delete</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
