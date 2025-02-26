@@ -20,11 +20,10 @@ import SearchBar from "@/components/SearchBar";
 import { EllipsisVertical, Search } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { Plus } from "lucide-react";
-import Image from "next/image";
 import trainersData from "./data/trainers.json";
-
+import Image from "next/image";
+import avatar from "@/public/profilepicdefault.png";
 export default function Home() {
-  // Apply 'as const' to ensure type safety and auto-completion
   const trainers = trainersData;
 
   return (
@@ -106,48 +105,70 @@ export default function Home() {
           </Dropdown>
         </div>
       </div>
-      <Table className="shadow-lg rounded-lg w-full table-fixed">
-        <TableHeader className="font-bold w-screen">
-          <TableColumn className="text-center font-bold text-white bg-secondary">
-            First Name
+      <Table
+        removeWrapper
+        isStriped
+        className="shadow-lg rounded-lg w-full table-fixed "
+      >
+        <TableHeader className="font-bold w-screen text-lg">
+          <TableColumn className="text-center font-bold text-white bg-secondary text-md pr-2">
+            Avatar
           </TableColumn>
-          <TableColumn className="text-center font-bold text-white bg-secondary">
+          <TableColumn className="text-center font-bold text-white bg-secondary text-md pr-2">
+            Full Name
+          </TableColumn>
+          <TableColumn className="text-center font-bold text-white bg-secondary text-md p-2">
             Gender
           </TableColumn>
-          <TableColumn className="text-center font-bold text-white bg-secondary">
+          <TableColumn className="text-center font-bold text-white bg-secondary text-md p-2">
             Profile
           </TableColumn>
-          <TableColumn className="text-center font-bold text-white bg-secondary">
+          <TableColumn className="text-center font-bold text-white bg-secondary text-md p-2">
             Education
           </TableColumn>
-          <TableColumn className="text-center font-bold text-white bg-secondary">
+          <TableColumn className="text-center font-bold text-white bg-secondary text-md p-2">
             Certifications
           </TableColumn>
-          <TableColumn className="text-center font-bold text-white bg-secondary">
+          <TableColumn className="text-center font-bold text-white bg-secondary text-md p-2">
             Training Expertise
           </TableColumn>
-          <TableColumn className="text-center font-bold text-white bg-secondary">
+          <TableColumn className="text-center font-bold text-white bg-secondary text-md p-2">
             Training Methods
           </TableColumn>
         </TableHeader>
-        <TableBody>
+        <TableBody emptyContent={"No rows to display."}>
           {trainers.trainers.map((trainer, index) => (
             <TableRow
-              className="text-gray-700 border-b border-opacity-100"
+              className="text-gray-700 border-b border-opacity-100 hover:bg-blue-200 hover:cursor-pointer"
               key={index}
             >
-              <TableCell className="text-center">
+              {/* Avatar */}
+              <TableCell className="text-center font-semibold pr-4">
+                <Image src={avatar} alt="Avatar" width={50} height={50} />
+              </TableCell>
+              {/* First Name with Title */}
+              <TableCell className="text-center font-semibold pr-4">
                 {trainer.title
                   ? `${trainer.title} ${trainer.firstName} ${trainer.lastName}`
                   : `${trainer.firstName} ${trainer.lastName}`}
               </TableCell>
-              <TableCell className="text-center">{trainer.gender}</TableCell>
-              <TableCell className="text-center">
-                {trainer.professionalProfile}
+
+              {/* Gender */}
+              <TableCell className="text-center p-4">
+                {trainer.gender}
               </TableCell>
-              <TableCell className="text-center">
-                <ul>
-                  {trainer.education.map((edu, idx) => (
+
+              {/* Profile: Display first two lines */}
+              <TableCell className="text-center p-4">
+                <div className="text-gray-600 line-clamp-2">
+                  {trainer.professionalProfile}
+                </div>
+              </TableCell>
+
+              {/* Education: Display first two lines */}
+              <TableCell className="text-center p-4">
+                <ul className="line-clamp-2">
+                  {trainer.education.slice(0, 2).map((edu, idx) => (
                     <li key={idx}>
                       {edu.degreeType} {edu.fieldOfStudy}
                     </li>
@@ -155,9 +176,10 @@ export default function Home() {
                 </ul>
               </TableCell>
 
-              <TableCell className="text-center">
-                <ul>
-                  {trainer.certifications.map((cert, idx) => (
+              {/* Certifications: Display first two lines */}
+              <TableCell className="text-center p-4">
+                <ul className="line-clamp-2">
+                  {trainer.certifications.slice(0, 2).map((cert, idx) => (
                     <li key={idx}>
                       {cert.certificationName} - {cert.issuingOrganization}
                     </li>
@@ -165,21 +187,23 @@ export default function Home() {
                 </ul>
               </TableCell>
 
-              {/* Training Expertise: Display as bullet points */}
-              <TableCell className="text-center">
-                <ul>
-                  {trainer.trainingExpertise.map((expertise, idx) => (
-                    <li key={idx}>
-                      {expertise.name}: {expertise.otherInformation}
-                    </li>
-                  ))}
+              {/* Training Expertise: Display first two lines */}
+              <TableCell className="text-center p-4">
+                <ul className="line-clamp-2">
+                  {trainer.trainingExpertise
+                    .slice(0, 2)
+                    .map((expertise, idx) => (
+                      <li key={idx}>
+                        {expertise.name}: {expertise.otherInformation}
+                      </li>
+                    ))}
                 </ul>
               </TableCell>
 
-              {/* Training Methods: Display as bullet points */}
-              <TableCell className="text-center">
-                <ul>
-                  {trainer.trainingMethods.map((method, idx) => (
+              {/* Training Methods: Display first two lines */}
+              <TableCell className="text-center p-4">
+                <ul className="line-clamp-2">
+                  {trainer.trainingMethods.slice(0, 2).map((method, idx) => (
                     <li key={idx}>{method.name}</li>
                   ))}
                 </ul>
