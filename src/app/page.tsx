@@ -25,7 +25,7 @@ import trainersData from "./data/trainers.json";
 
 export default function Home() {
   // Apply 'as const' to ensure type safety and auto-completion
-  const trainers = trainersData 
+  const trainers = trainersData;
 
   return (
     <div className="flex flex-col justify-center min-h-screen bg-white p-4">
@@ -112,13 +112,7 @@ export default function Home() {
             First Name
           </TableColumn>
           <TableColumn className="text-center font-bold text-white bg-secondary">
-            Last Name
-          </TableColumn>
-          <TableColumn className="text-center font-bold text-white bg-secondary">
             Gender
-          </TableColumn>
-          <TableColumn className="text-center font-bold text-white bg-secondary">
-            Title
           </TableColumn>
           <TableColumn className="text-center font-bold text-white bg-secondary">
             Profile
@@ -142,25 +136,26 @@ export default function Home() {
               className="text-gray-700 border-b border-opacity-100"
               key={index}
             >
-              <TableCell className="text-center">{trainer.firstName} </TableCell>
-              <TableCell className="text-center">{trainer.lastName}</TableCell>
+              <TableCell className="text-center">
+                {trainer.title
+                  ? `${trainer.title} ${trainer.firstName} ${trainer.lastName}`
+                  : `${trainer.firstName} ${trainer.lastName}`}
+              </TableCell>
               <TableCell className="text-center">{trainer.gender}</TableCell>
-              <TableCell className="text-center">{trainer.title}</TableCell>
               <TableCell className="text-center">
                 {trainer.professionalProfile}
               </TableCell>
-               <TableCell className="text-center">
+              <TableCell className="text-center">
                 <ul>
                   {trainer.education.map((edu, idx) => (
                     <li key={idx}>
-                      {edu.degreeType}{" "}
-                      {edu.fieldOfStudy}
+                      {edu.degreeType} {edu.fieldOfStudy}
                     </li>
                   ))}
                 </ul>
               </TableCell>
 
-               <TableCell className="text-center">
+              <TableCell className="text-center">
                 <ul>
                   {trainer.certifications.map((cert, idx) => (
                     <li key={idx}>
