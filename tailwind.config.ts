@@ -12,7 +12,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-poppins)", "sans-serif"], // Poppins as default
-        mono: ["var(--font-geist-mono)", "monospace"], // Keep Geist Mono
+        mono: ["sans-serif"], // Change to sans-serif when `font-mono` is used
         geist: ["var(--font-geist-sans)", "sans-serif"], // Keep Geist Sans
       },
       colors: {
