@@ -32,28 +32,63 @@ import avatar from "@/public/profilepicdefault.png";
 import { useState } from "react";
 
 export default function Home() {
+  //array: main array that contains all trainer data imported from the json file
+
+  const trainers = trainersData;
+
+  {
+    /* Search bar logic */
+  }
   const [search, setSearch] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(100);
-
-  const handleRowsPerPageChange = (newValue) => {
-    setRowsPerPage(newValue);
-  };
-
+  //ensures the data entered in searchh is entered in lowercase only
   const handleSearch = (e) => {
     setSearch(e.target.value.toLowerCase());
   };
-  //array: main array that contains all trainer data imported from the json file
-  const trainers = trainersData;
 
-  //revise
-  const filteredTrainers = trainers.trainers.filter((trainer) =>
-    `${trainer.firstName} ${trainer.lastName}`.toLowerCase().includes(search)
+  const filteredTrainers = trainers.trainers.filter(
+    (trainer) =>
+      // Check if the full name (first and last) contains the search term
+      `${trainer.firstName} ${trainer.lastName}`
+        .toLowerCase()
+        .includes(search) ||
+      // Check if gender contains the search term
+      trainer.gender.toLowerCase().includes(search) ||
+      // Check if professional profile contains the search term
+      trainer.professionalProfile.toLowerCase().includes(search) ||
+      // Check if any degree type or field of study contains the search term (in education)
+      trainer.education.some((edu) =>
+        `${edu.degreeType} ${edu.fieldOfStudy}`.toLowerCase().includes(search)
+      ) ||
+      // Check if any certification name or issuing organization contains the search term
+      trainer.certifications.some((cert) =>
+        `${cert.certificationName} ${cert.issuingOrganization}`
+          .toLowerCase()
+          .includes(search)
+      ) ||
+      // Check if any training expertise contains the search term
+      trainer.trainingExpertise.some((expertise) =>
+        expertise.name.toLowerCase().includes(search)
+      ) ||
+      // Check if any training method contains the search term
+      trainer.trainingMethods.some((method) =>
+        method.name.toLowerCase().includes(search)
+      )
   );
 
-  //revise
 
+  {
+    /* Sort By Rows*/
+  }
+  const [rowsPerPage, setRowsPerPage] = useState(100);
+  const handleRowsPerPageChange = (newValue) => {
+    setRowsPerPage(newValue);
+  };
   const displayedTrainers = filteredTrainers.slice(0, rowsPerPage);
 
+
+  {
+    /* Selected Expertise Filter */
+  }
   //this contains the value for the expertise user chooses to filter by from the dropdown
   const [selectedExpertise, setSelectedExpertise] = useState(null);
   //array: goes through the trainers main array and then goes through the trainingExpertise array to get the name of all expertise (with duplicates)
@@ -88,7 +123,7 @@ export default function Home() {
               className="rounded-lg focus:ring-2 text-xl focus:ring-blue-500 rounded-full w-8/12" // Set width to half
             />
           </div>
- 
+
           <div className="flex items-center gap-2">
             {/* Status dropdown */}
             <Dropdown>
@@ -208,13 +243,13 @@ export default function Home() {
               AVATAR -{selectedExpertise}
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-2">
-              FULL NAME 
+              FULL NAME
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
               GENDER
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
-              PROFILE 
+              PROFILE
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
               EDUCATION
@@ -231,7 +266,9 @@ export default function Home() {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu className="text-gray-700 max-h-32 overflow-y-auto">
-                  <DropdownItem className="" key="active">Active</DropdownItem>
+                  <DropdownItem className="" key="active">
+                    Active
+                  </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </TableColumn>
