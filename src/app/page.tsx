@@ -32,40 +32,46 @@ import avatar from "@/public/profilepicdefault.png";
 import { useState } from "react";
 
 export default function Home() {
-  const trainers = trainersData;
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(100);
 
   const handleRowsPerPageChange = (newValue) => {
     setRowsPerPage(newValue);
   };
+
   const handleSearch = (e) => {
     setSearch(e.target.value.toLowerCase());
   };
+  //array: main array that contains all trainer data imported from the json file
+  const trainers = trainersData;
 
-  const [selectedExpertise, setSelectedExpertise] = useState("");
-
+  //revise
   const filteredTrainers = trainers.trainers.filter((trainer) =>
     `${trainer.firstName} ${trainer.lastName}`.toLowerCase().includes(search)
   );
+
+  //revise
+
   const displayedTrainers = filteredTrainers.slice(0, rowsPerPage);
 
-  const expertise = displayedTrainers.map((trainer) =>
+  //this contains the value for the expertise user chooses to filter by from the dropdown
+  const [selectedExpertise, setSelectedExpertise] = useState(null);
+  //array: goes through the trainers main array and then goes through the trainingExpertise array to get the name of all expertise (with duplicates)
+  const expertise = trainers.trainers.map((trainer) =>
     trainer.trainingExpertise.map((expertise) => expertise.name)
   );
 
-  const handleExpertiseFilter = (expertise) => {
-    setSelectedExpertise(expertise);
-  };
-  const filteredByExpertise = selectedExpertise
-    ? displayedTrainers.filter((trainer) =>
+  //array: removes duplicates from the expertise array by spreading the expertise array into a new set and then spreading that set into a new array
+  const expertiseUnique = [...new Set(expertise.flat())];
+
+  const selectedExpertiseFiltered = selectedExpertise
+    ? trainers.trainers.filter((trainer) =>
         trainer.trainingExpertise.some(
           (expertise) => expertise.name === selectedExpertise
         )
       )
-    : displayedTrainers;
+    : trainers.trainers;
 
-  const expertiseUnique = [...new Set(expertise.flat())];
   return (
     <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
       <div className="text-white"> HELLO </div>
@@ -82,7 +88,7 @@ export default function Home() {
               className="rounded-lg focus:ring-2 text-xl focus:ring-blue-500 rounded-full w-8/12" // Set width to half
             />
           </div>
-
+ 
           <div className="flex items-center gap-2">
             {/* Status dropdown */}
             <Dropdown>
@@ -145,7 +151,7 @@ export default function Home() {
         <div className="flex flex-row justify-between gap-2 text-gray-400 font-light p-2 ">
           <div className="flex flex-row ">
             <div>Total: </div>
-            <div> {displayedTrainers.length} users</div>
+            <div> {selectedExpertiseFiltered.length} users</div>
           </div>
           <div className="flex items-center gap-2">
             <span>Rows per page:</span>
@@ -199,22 +205,22 @@ export default function Home() {
         >
           <TableHeader className="w-screen text-md bg-white">
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
-              AVATAR
+              AVATAR -{selectedExpertise}
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-2">
-              FULL NAME
+              FULL NAME 
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
               GENDER
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
-              PROFILE
+              PROFILE 
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
               EDUCATION
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
-              <Dropdown>
+              <Dropdown className="">
                 <DropdownTrigger>
                   <Button
                     size={"lg"}
@@ -224,8 +230,8 @@ export default function Home() {
                     <ChevronDown className="text-gray-500" size={100} />
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu className="text-gray-700">
-                  <DropdownItem key="active">Active</DropdownItem>
+                <DropdownMenu className="text-gray-700 max-h-32 overflow-y-auto">
+                  <DropdownItem className="" key="active">Active</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </TableColumn>
@@ -240,17 +246,11 @@ export default function Home() {
                     <ChevronDown className="text-gray-500" size={100} />
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu className="text-gray-700 max-h-32 max-w-72 overflow-y-auto">
-                  <DropdownItem
-                    key="all"
-                    onClick={() => handleExpertiseFilter("")}
-                  >
-                    All
-                  </DropdownItem>
+                <DropdownMenu className="text-gray-700 max-h-32 overflow-y-auto">
                   {expertiseUnique.map((expertise, idx) => (
                     <DropdownItem
                       key={idx}
-                      onClick={() => handleExpertiseFilter(expertise)}
+                      onClick={() => setSelectedExpertise(expertise)}
                     >
                       {expertise}
                     </DropdownItem>
@@ -264,7 +264,7 @@ export default function Home() {
           </TableHeader>
 
           <TableBody emptyContent={"No rows to display."}>
-            {displayedTrainers.map((trainer, index) => (
+            {selectedExpertiseFiltered.map((trainer, index) => (
               <TableRow
                 data-hover
                 className="text-gray-700 hover:bg-blue-200 hover:cursor-pointer odd:bg-white even:bg-gray-100"
