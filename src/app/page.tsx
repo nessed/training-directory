@@ -32,74 +32,18 @@ import avatar from "@/public/profilepicdefault.png";
 import { useState } from "react";
 
 export default function Home() {
-  //array: main array that contains all trainer data imported from the json file
-
+  // main array that contains all trainer data imported from the json file
   const trainers = trainersData;
-
-  {
-    /* Search bar logic */
-  }
-  const [search, setSearch] = useState("");
-  //ensures the data entered in searchh is entered in lowercase only
-  const handleSearch = (e) => {
-    setSearch(e.target.value.toLowerCase());
-  };
-
-  const filteredTrainers = trainers.trainers.filter(
-    (trainer) =>
-      // Check if the full name (first and last) contains the search term
-      `${trainer.firstName} ${trainer.lastName}`
-        .toLowerCase()
-        .includes(search) ||
-      // Check if gender contains the search term
-      trainer.gender.toLowerCase().includes(search) ||
-      // Check if professional profile contains the search term
-      trainer.professionalProfile.toLowerCase().includes(search) ||
-      // Check if any degree type or field of study contains the search term (in education)
-      trainer.education.some((edu) =>
-        `${edu.degreeType} ${edu.fieldOfStudy}`.toLowerCase().includes(search)
-      ) ||
-      // Check if any certification name or issuing organization contains the search term
-      trainer.certifications.some((cert) =>
-        `${cert.certificationName} ${cert.issuingOrganization}`
-          .toLowerCase()
-          .includes(search)
-      ) ||
-      // Check if any training expertise contains the search term
-      trainer.trainingExpertise.some((expertise) =>
-        expertise.name.toLowerCase().includes(search)
-      ) ||
-      // Check if any training method contains the search term
-      trainer.trainingMethods.some((method) =>
-        method.name.toLowerCase().includes(search)
-      )
-  );
-
-
-  {
-    /* Sort By Rows*/
-  }
-  const [rowsPerPage, setRowsPerPage] = useState(100);
-  const handleRowsPerPageChange = (newValue) => {
-    setRowsPerPage(newValue);
-  };
-  const displayedTrainers = filteredTrainers.slice(0, rowsPerPage);
-
-
-  {
-    /* Selected Expertise Filter */
-  }
-  //this contains the value for the expertise user chooses to filter by from the dropdown
   const [selectedExpertise, setSelectedExpertise] = useState(null);
-  //array: goes through the trainers main array and then goes through the trainingExpertise array to get the name of all expertise (with duplicates)
+
+  // filteration by expertise
   const expertise = trainers.trainers.map((trainer) =>
-    trainer.trainingExpertise.map((expertise) => expertise.name)
-  );
+    trainer.trainingExpertise.map((expertise) => expertise.name) //contains all the expertise of all trainers, unduplicated
+  
+);
+  const expertiseUnique = [...new Set(expertise.flat())]; //deduping expertise array by first turning expertise flat so all expertise are in one array, then using set to make unique, then spreading to turn to an array
 
-  //array: removes duplicates from the expertise array by spreading the expertise array into a new set and then spreading that set into a new array
-  const expertiseUnique = [...new Set(expertise.flat())];
-
-  const selectedExpertiseFiltered = selectedExpertise
+  const filteredByExpertise = selectedExpertise
     ? trainers.trainers.filter((trainer) =>
         trainer.trainingExpertise.some(
           (expertise) => expertise.name === selectedExpertise
@@ -107,10 +51,45 @@ export default function Home() {
       )
     : trainers.trainers;
 
+  //Search bar logic
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value.toLowerCase());  //ensures the data entered in search is entered in lowercase only
+
+  };
+
+  const searchedResults = filteredByExpertise.filter(
+    (trainer) =>
+      // Check full name
+      `${trainer.firstName} ${trainer.lastName}`
+        .toLowerCase()
+        .includes(search) ||
+      trainer.gender.toLowerCase().includes(search) ||
+      trainer.professionalProfile.toLowerCase().includes(search) ||
+      trainer.education.some((edu) =>
+        `${edu.degreeType} ${edu.fieldOfStudy}`.toLowerCase().includes(search)
+      ) ||
+      trainer.certifications.some((cert) =>
+        `${cert.certificationName} ${cert.issuingOrganization}`
+          .toLowerCase()
+          .includes(search)
+      ) ||
+      trainer.trainingExpertise.some((expertise) =>
+        expertise.name.toLowerCase().includes(search)
+      ) ||
+      trainer.trainingMethods.some((method) =>
+        method.name.toLowerCase().includes(search)
+      )
+  );
+
+  //final array to be rendered to table
+  const trainersToDisplay = search ? searchedResults : filteredByExpertise; //if search has a value, it will display the searched results, else it will display the filtered results which contains either trainers full or filtered set
+
   return (
     <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
       <div className="text-white"> HELLO </div>
-      {/* Search bar with icon */}
+      // & Search bar with icon
       <div className="flex flex-col justify-between gap-2 px-10 p-2">
         <div className="w-full flex flex-row justify-between gap-2 p-1">
           <div className="w-full flex">
@@ -186,15 +165,14 @@ export default function Home() {
         <div className="flex flex-row justify-between gap-2 text-gray-400 font-light p-2 ">
           <div className="flex flex-row ">
             <div>Total: </div>
-            <div> {selectedExpertiseFiltered.length} users</div>
+            <div> WIP users</div>
           </div>
           <div className="flex items-center gap-2">
             <span>Rows per page:</span>
             <Dropdown>
               <DropdownTrigger>
                 <Button variant="flat" size="sm" className="font-semibold">
-                  {rowsPerPage}
-                  <ChevronDown className="text-gray-500" size={16} />
+                  wip <ChevronDown className="text-gray-500" size={16} />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu className="text-gray-700">
@@ -301,7 +279,7 @@ export default function Home() {
           </TableHeader>
 
           <TableBody emptyContent={"No rows to display."}>
-            {selectedExpertiseFiltered.map((trainer, index) => (
+            {trainersToDisplay.map((trainer, index) => (
               <TableRow
                 data-hover
                 className="text-gray-700 hover:bg-blue-200 hover:cursor-pointer odd:bg-white even:bg-gray-100"
@@ -354,16 +332,14 @@ export default function Home() {
                 {/* Training Expertise */}
                 <TableCell className="text-left px-4 border-gray-200">
                   <ul className="">
-                    {trainer.trainingExpertise
-                      .slice(0, 2)
-                      .map((expertise, idx) => (
-                        <li key={idx}>
-                          {expertise.name}
-                          {expertise.otherInformation
-                            ? `: ${expertise.otherInformation}`
-                            : ""}
-                        </li>
-                      ))}
+                    {trainer.trainingExpertise.map((expertise, idx) => (
+                      <li key={idx}>
+                        {expertise.name}
+                        {expertise.otherInformation
+                          ? `: ${expertise.otherInformation}`
+                          : ""}
+                      </li>
+                    ))}
                   </ul>
                 </TableCell>
 
@@ -393,7 +369,6 @@ export default function Home() {
           </TableBody>
         </Table>
       </div>
-
       <Pagination
         key="secondary"
         color="secondary"
