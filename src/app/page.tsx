@@ -24,6 +24,8 @@ import {
   Monitor,
   ArrowUp,
   ArrowDown,
+  Linkedin,
+  X,
 } from "lucide-react";
 import { Plus } from "lucide-react";
 import trainersData from "./data/trainers.json";
@@ -37,10 +39,9 @@ export default function Home() {
   const [selectedExpertise, setSelectedExpertise] = useState(null);
 
   // filteration by expertise
-  const expertise = trainers.trainers.map((trainer) =>
-    trainer.trainingExpertise.map((expertise) => expertise.name) //contains all the expertise of all trainers, unduplicated
-  
-);
+  const expertise = trainers.trainers.map(
+    (trainer) => trainer.trainingExpertise.map((expertise) => expertise.name) //contains all the expertise of all trainers, unduplicated
+  );
   const expertiseUnique = [...new Set(expertise.flat())]; //deduping expertise array by first turning expertise flat so all expertise are in one array, then using set to make unique, then spreading to turn to an array
 
   const filteredByExpertise = selectedExpertise
@@ -55,8 +56,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
 
   const handleSearch = (e) => {
-    setSearch(e.target.value.toLowerCase());  //ensures the data entered in search is entered in lowercase only
-
+    setSearch(e.target.value.toLowerCase()); //ensures the data entered in search is entered in lowercase only
   };
 
   const searchedResults = filteredByExpertise.filter(
@@ -217,11 +217,8 @@ export default function Home() {
           className="w-full table-fixed overflow-y-visible "
         >
           <TableHeader className="w-screen text-md bg-white">
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
-              AVATAR -{selectedExpertise}
-            </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-2">
-              FULL NAME
+              FULL NAME-{selectedExpertise}
             </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
               GENDER
@@ -258,6 +255,15 @@ export default function Home() {
                     className="text-left text-gray-600 bg-gray-200 font-medium text-md"
                   >
                     EXPERTISE
+                    {selectedExpertise && (
+                      <Button
+                       size="sm"
+                        onClick={() => setSelectedExpertise(null)}
+                        className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:ring-2 focus:ring-blue-300 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200 shadow-md"
+                      >
+                        <X/>
+                      </Button>
+                    )}
                     <ChevronDown className="text-gray-500" size={100} />
                   </Button>
                 </DropdownTrigger>
@@ -285,14 +291,42 @@ export default function Home() {
                 className="text-gray-700 hover:bg-blue-200 hover:cursor-pointer odd:bg-white even:bg-gray-100"
                 key={index}
               >
-                {/* Avatar */}
-                <TableCell className="text-left font-semibold px-4 border-gray-200 ">
-                  <Image src={avatar} alt="Avatar" width={50} height={50} />
-                </TableCell>
-
                 {/* Full Name */}
                 <TableCell className="text-left font-semibold px-4 border-gray-200">
-                  {trainer.firstName} {trainer.lastName}
+                  <div className="flex flex-row items-center gap-2">
+                    <Image
+                      className="rounded-lg"
+                      src={avatar}
+                      alt="Avatar"
+                      width={50}
+                      height={50}
+                    />
+                    <div className="flex flex-col">
+                      {trainer.firstName} {trainer.lastName}
+                      {/* LinkedIn URL and icon */}
+                      {trainer.linkedinUrl && (
+                        <div className="flex items-center gap-2">
+                          {/* LinkedIn icon inside a gray circle */}
+                          <a
+                            href={trainer.linkedinUrl}
+                            target="_blank"
+                            className="flex items-center justify-center w-8 h-8 bg-gray-300 rounded-full"
+                          >
+                            <Linkedin className="w-5 h-5 text-white" />
+                          </a>
+
+                          {/* LinkedIn URL */}
+                          <a
+                            href={trainer.linkedinUrl}
+                            target="_blank"
+                            className="font-medium text-gray-500 line-clamp-1"
+                          >
+                            {trainer.linkedinUrl}
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </TableCell>
 
                 {/* Gender */}
