@@ -16,6 +16,8 @@ import {
   Checkbox,
   Pagination,
   Tooltip,
+  Accordion,
+  AccordionItem,
 } from "@heroui/react";
 import {
   ChevronDown,
@@ -26,6 +28,9 @@ import {
   ArrowDown,
   Linkedin,
   X,
+  ClipboardCheck,
+  BadgeCheck,
+  GraduationCap,
 } from "lucide-react";
 import { Plus } from "lucide-react";
 import trainersData from "./data/trainers.json";
@@ -59,9 +64,9 @@ export default function Home() {
     setSearch(e.target.value.toLowerCase()); //ensures the data entered in search is entered in lowercase only
   };
 
+  //checks searchedResults array for any matches with the search value
   const searchedResults = filteredByExpertise.filter(
     (trainer) =>
-      // Check full name
       `${trainer.firstName} ${trainer.lastName}`
         .toLowerCase()
         .includes(search) ||
@@ -104,7 +109,6 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Status dropdown */}
             <Dropdown>
               <DropdownTrigger>
                 <Button
@@ -122,7 +126,6 @@ export default function Home() {
               </DropdownMenu>
             </Dropdown>
 
-            {/* Columns dropdown */}
             <Dropdown>
               <DropdownTrigger>
                 <Button
@@ -142,7 +145,6 @@ export default function Home() {
               </DropdownMenu>
             </Dropdown>
 
-            {/* Add User dropdown */}
             <Dropdown>
               <DropdownTrigger>
                 <Button
@@ -217,19 +219,19 @@ export default function Home() {
           className="w-full table-fixed overflow-y-visible "
         >
           <TableHeader className="w-screen text-md bg-white">
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-2">
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
               FULL NAME-{selectedExpertise}
             </TableColumn>
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
-              GENDER
-            </TableColumn>
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
+
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
               PROFILE
             </TableColumn>
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
+
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
               EDUCATION
             </TableColumn>
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
+
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
               <Dropdown className="">
                 <DropdownTrigger>
                   <Button
@@ -247,7 +249,8 @@ export default function Home() {
                 </DropdownMenu>
               </Dropdown>
             </TableColumn>
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
+
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
               <Dropdown>
                 <DropdownTrigger>
                   <Button
@@ -257,11 +260,11 @@ export default function Home() {
                     EXPERTISE
                     {selectedExpertise && (
                       <Button
-                       size="sm"
+                        size="sm"
                         onClick={() => setSelectedExpertise(null)}
                         className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:ring-2 focus:ring-blue-300 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200 shadow-md"
                       >
-                        <X/>
+                        <X />
                       </Button>
                     )}
                     <ChevronDown className="text-gray-500" size={100} />
@@ -279,7 +282,8 @@ export default function Home() {
                 </DropdownMenu>
               </Dropdown>
             </TableColumn>
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md">
+
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-16 w-1/4">
               TRAINING METHODS
             </TableColumn>
           </TableHeader>
@@ -306,14 +310,10 @@ export default function Home() {
                       {/* LinkedIn URL and icon */}
                       {trainer.linkedinUrl && (
                         <div className="flex items-center gap-2">
-                          {/* LinkedIn icon inside a gray circle */}
-                          <a
-                            href={trainer.linkedinUrl}
-                            target="_blank"
-                            className="flex items-center justify-center w-8 h-8 bg-gray-300 rounded-full"
-                          >
-                            <Linkedin className="w-5 h-5 text-white" />
-                          </a>
+                          {/* LinkedIn icon inside a gray circle with updated styling */}
+                          <div className="flex items-center justify-center max-w-6 max-h-6 min-h-6 min-w-6 bg-gray-600 rounded-full shadow-lg text-white transition-all duration-300 hover:bg-gray-700">
+                            <Linkedin className="w-4 h-4" />
+                          </div>
 
                           {/* LinkedIn URL */}
                           <a
@@ -329,35 +329,46 @@ export default function Home() {
                   </div>
                 </TableCell>
 
-                {/* Gender */}
-                <TableCell className="text-left px-4 border-gray-200">
-                  {trainer.gender}
-                </TableCell>
-
                 {/* Profile */}
                 <TableCell className="text-left px-4 border-gray-200">
-                  <div className="text-gray-600 bline-clamp-2 pr-36">
-                    {trainer.professionalProfile}
+                  <div className="max-w-full">
+                    <div className="">{trainer.professionalProfile}</div>
                   </div>
                 </TableCell>
 
                 {/* Education */}
                 <TableCell className="text-left px-4 border-gray-200">
                   <ul className="">
-                    {trainer.education.slice(0, 2).map((edu, idx) => (
-                      <li key={idx}>
-                        {edu.degreeType} {edu.fieldOfStudy}
+                    {trainer.education.map((edu, idx) => (
+                      <li className="flex  gap-2 py-1" key={idx}>
+                        {/* Graduation Cap Icon with similar styling */}
+                        <GraduationCap className="max-w-5 max-h-5 min-w-5 min-h-5 text-white bg-gray-600 rounded-full  p-1 transition-all duration-300 hover:bg-gray-700" />
+
+                        <span>
+                          {edu.degreeType} {edu.fieldOfStudy}
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </TableCell>
 
                 {/* Certifications */}
-                <TableCell className="text-left px-4 border-gray-200">
+                <TableCell className="text-left border-gray-200">
                   <ul className="">
-                    {trainer.certifications.slice(0, 2).map((cert, idx) => (
-                      <li key={idx}>
-                        {cert.certificationName} - {cert.issuingOrganization}
+                    {trainer.certifications.map((cert, idx) => (
+                      <li className="flex items-center gap-2 py-1" key={idx}>
+                        {/* Badge */}
+                        <BadgeCheck className="min-w-5 min-h-5 max-w-5 max-h-5 text-white bg-gray-600 rounded-full flex items-center justify-center p-1 transition-all duration-300 hover:bg-gray-700" />
+                        {/* Certification Name */}
+                        <span className="flex-grow">
+                          {cert.certificationName}
+                        </span>
+                        {/* Issuing Organization (conditionally rendered) */}
+                        {cert.issuingOrganization && (
+                          <span className="ml-1 text-gray-500">
+                            - {cert.issuingOrganization}
+                          </span>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -367,19 +378,23 @@ export default function Home() {
                 <TableCell className="text-left px-4 border-gray-200">
                   <ul className="">
                     {trainer.trainingExpertise.map((expertise, idx) => (
-                      <li key={idx}>
-                        {expertise.name}
-                        {expertise.otherInformation
-                          ? `: ${expertise.otherInformation}`
-                          : ""}
+                      <li className="flex gap-2 py-1" key={idx}>
+                        {/* Adding ClipboardCheck Icon */}
+                        <ClipboardCheck className="max-w-5 max-h-5 min-h-5 min-w-5 text-white bg-gray-600 rounded-full flex items-center justify-center p-1" />
+                        <span>
+                          {expertise.name}
+                          {expertise.otherInformation
+                            ? `: ${expertise.otherInformation}`
+                            : ""}
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </TableCell>
 
                 {/* Training Methods */}
-                <TableCell className="text-left px-4 border-gray-200">
-                  <div className="flex gap-2">
+                <TableCell className="text-left px-4 border-gray-200 align-middle">
+                  <div className="flex gap-2 justify-start">
                     {trainer.trainingMethods.map((method, idx) => (
                       <Tooltip
                         className="text-black"
