@@ -41,6 +41,8 @@ import { useState } from "react";
 export default function Home() {
   // main array that contains all trainer data imported from the json file
   const trainers = trainersData;
+  
+  //
   const [selectedExpertise, setSelectedExpertise] = useState(null);
 
   // filteration by expertise
