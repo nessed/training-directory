@@ -37,11 +37,16 @@ import trainersData from "./data/trainers.json";
 import Image from "next/image";
 import avatar from "@/public/profilepicdefault.png";
 import { useState } from "react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 export default function Home() {
   // main array that contains all trainer data imported from the json file
   const trainers = trainersData;
-  
+
   //
   const [selectedExpertise, setSelectedExpertise] = useState(null);
 
@@ -321,7 +326,7 @@ export default function Home() {
                           <a
                             href={trainer.linkedinUrl}
                             target="_blank"
-                            className="font-medium text-gray-500 line-clamp-1"
+                            className="font-medium text-gray-500 line-clamp-1 hover:line-clamp-none "
                           >
                             {trainer.linkedinUrl}
                           </a>
@@ -333,7 +338,7 @@ export default function Home() {
 
                 {/* Profile */}
                 <TableCell className="text-left px-4 border-gray-200">
-                  <div className="max-w-full">
+                  <div className="max-w-full line-clamp-1 hover:line-clamp-none ">
                     <div className="">{trainer.professionalProfile}</div>
                   </div>
                 </TableCell>
@@ -342,7 +347,7 @@ export default function Home() {
                 <TableCell className="text-left px-4 border-gray-200">
                   <ul className="">
                     {trainer.education.map((edu, idx) => (
-                      <li className="flex  gap-2 py-1" key={idx}>
+                      <li className="flex  gap-2 py-1 " key={idx}>
                         {/* Graduation Cap Icon with similar styling */}
                         <GraduationCap className="max-w-5 max-h-5 min-w-5 min-h-5 text-white bg-gray-600 rounded-full  p-1 transition-all duration-300 hover:bg-gray-700" />
 
