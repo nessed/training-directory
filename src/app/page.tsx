@@ -41,7 +41,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 
 export default function Home() {
   // main array that contains all trainer data imported from the json file
@@ -49,6 +49,10 @@ export default function Home() {
 
   //
   const [selectedExpertise, setSelectedExpertise] = useState(null);
+  const [expandedRow, setExpandedRow] = useState(null);
+  const toggleRow = (index) => {
+    setExpandedRow(expandedRow === index ? null : index);
+  };
 
   // filteration by expertise
   const expertise = trainers.trainers.map(
@@ -101,7 +105,6 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
       <div className="text-white"> HELLO </div>
-      // & Search bar with icon
       <div className="flex flex-col justify-between gap-2 px-10 p-2">
         <div className="w-full flex flex-row justify-between gap-2 p-1">
           <div className="w-full flex">
@@ -227,6 +230,9 @@ export default function Home() {
         >
           <TableHeader className="w-screen text-md bg-white">
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
+              Index
+            </TableColumn>
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
               FULL NAME-{selectedExpertise}
             </TableColumn>
 
@@ -298,10 +304,14 @@ export default function Home() {
           <TableBody emptyContent={"No rows to display."}>
             {trainersToDisplay.map((trainer, index) => (
               <TableRow
+                key={index}
                 data-hover
                 className="text-gray-700 hover:bg-blue-200 hover:cursor-pointer odd:bg-white even:bg-gray-100"
-                key={index}
               >
+                <TableCell className="text-left px-4 border-gray-200">
+                  {index}
+                </TableCell>
+
                 {/* Full Name */}
                 <TableCell className="text-left font-semibold px-4 border-gray-200">
                   <div className="flex flex-row items-center gap-2">
@@ -314,19 +324,15 @@ export default function Home() {
                     />
                     <div className="flex flex-col">
                       {trainer.firstName} {trainer.lastName}
-                      {/* LinkedIn URL and icon */}
                       {trainer.linkedinUrl && (
                         <div className="flex items-center gap-2">
-                          {/* LinkedIn icon inside a gray circle with updated styling */}
-                          <div className="flex items-center justify-center max-w-6 max-h-6 min-h-6 min-w-6 bg-gray-600 rounded-full shadow-lg text-white transition-all duration-300 hover:bg-gray-700">
-                            <Linkedin className="w-4 h-4" />
+                          <div className="bg-gray-600 rounded-full p-1 transition-all duration-300 hover:bg-gray-700">
+                            <Linkedin className="w-4 h-4 text-white" />
                           </div>
-
-                          {/* LinkedIn URL */}
                           <a
                             href={trainer.linkedinUrl}
                             target="_blank"
-                            className="font-medium text-gray-500 line-clamp-1 hover:line-clamp-none "
+                            className="font-medium text-gray-500 line-clamp-1 hover:line-clamp-none"
                           >
                             {trainer.linkedinUrl}
                           </a>
@@ -337,20 +343,44 @@ export default function Home() {
                 </TableCell>
 
                 {/* Profile */}
-                <TableCell className="text-left px-4 border-gray-200">
-                  <div className="max-w-full line-clamp-1 hover:line-clamp-none ">
-                    <div className="">{trainer.professionalProfile}</div>
+                <TableCell className="text-left px-4 border-gray-200 relative">
+                  {/* Collapsed Profile (One-Line Clamped) */}
+                  {expandedRow !== index && (
+                    <div
+                      onClick={() => toggleRow(index)}
+                      className="cursor-pointer flex items-center gap-2 text-gray-700 hover:text-blue-600 transition duration-200"
+                    >
+                      <span className="font-medium truncate block max-w-full">
+                        {trainer.professionalProfile}
+                      </span>
+                      <ChevronDown
+                        className={`transition-transform duration-200 ${
+                          expandedRow === index ? "rotate-180" : ""
+                        }`}
+                      />
+                    </div>
+                  )}
+
+                  {/* Expanded Profile (Full Text) */}
+                  <div
+                    className={`transition-all duration-500 ease-in-out ${
+                      expandedRow === index
+                        ? "max-h-[500px] opacity-100 py-2 visible"
+                        : "max-h-0 opacity-0 invisible"
+                    }`}
+                  >
+                    <p className="text-gray-600">
+                      {trainer.professionalProfile}
+                    </p>
                   </div>
                 </TableCell>
 
                 {/* Education */}
                 <TableCell className="text-left px-4 border-gray-200">
-                  <ul className="">
+                  <ul>
                     {trainer.education.map((edu, idx) => (
-                      <li className="flex  gap-2 py-1 " key={idx}>
-                        {/* Graduation Cap Icon with similar styling */}
-                        <GraduationCap className="max-w-5 max-h-5 min-w-5 min-h-5 text-white bg-gray-600 rounded-full  p-1 transition-all duration-300 hover:bg-gray-700" />
-
+                      <li className="flex gap-2 py-1" key={idx}>
+                        <GraduationCap className="w-5 h-5 text-white bg-gray-600 rounded-full p-1 transition-all duration-300 hover:bg-gray-700" />
                         <span>
                           {edu.degreeType} {edu.fieldOfStudy}
                         </span>
@@ -361,16 +391,13 @@ export default function Home() {
 
                 {/* Certifications */}
                 <TableCell className="text-left border-gray-200">
-                  <ul className="">
+                  <ul>
                     {trainer.certifications.map((cert, idx) => (
                       <li className="flex items-center gap-2 py-1" key={idx}>
-                        {/* Badge */}
-                        <BadgeCheck className="min-w-5 min-h-5 max-w-5 max-h-5 text-white bg-gray-600 rounded-full flex items-center justify-center p-1 transition-all duration-300 hover:bg-gray-700" />
-                        {/* Certification Name */}
+                        <BadgeCheck className="w-5 h-5 text-white bg-gray-600 rounded-full p-1 transition-all duration-300 hover:bg-gray-700" />
                         <span className="flex-grow">
                           {cert.certificationName}
                         </span>
-                        {/* Issuing Organization (conditionally rendered) */}
                         {cert.issuingOrganization && (
                           <span className="ml-1 text-gray-500">
                             - {cert.issuingOrganization}
@@ -381,13 +408,12 @@ export default function Home() {
                   </ul>
                 </TableCell>
 
-                {/* Training Expertise */}
+                {/* Expertise */}
                 <TableCell className="text-left px-4 border-gray-200">
-                  <ul className="">
+                  <ul>
                     {trainer.trainingExpertise.map((expertise, idx) => (
                       <li className="flex gap-2 py-1" key={idx}>
-                        {/* Adding ClipboardCheck Icon */}
-                        <ClipboardCheck className="max-w-5 max-h-5 min-h-5 min-w-5 text-white bg-gray-600 rounded-full flex items-center justify-center p-1" />
+                        <ClipboardCheck className="w-5 h-5 text-white bg-gray-600 rounded-full p-1" />
                         <span>
                           {expertise.name}
                           {expertise.otherInformation
@@ -404,7 +430,6 @@ export default function Home() {
                   <div className="flex gap-2 justify-start">
                     {trainer.trainingMethods.map((method, idx) => (
                       <Tooltip
-                        className="text-black"
                         key={idx}
                         content={<span>{method.name}</span>}
                         placement="top"
