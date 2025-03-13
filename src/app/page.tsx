@@ -96,7 +96,6 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
       <div className="text-white"> HELLO </div>
-      // & Search bar with icon
       <div className="flex flex-col justify-between gap-2 px-10 p-2">
         <div className="w-full flex flex-row justify-between gap-2 p-1">
           <div className="w-full flex">
