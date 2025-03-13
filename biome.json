@@ -1,0 +1,87 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineWidth": 135,
+    "formatWithErrors": true
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "files": {
+    "ignore": [
+      "src/scripts/**/*",
+      "**/*/node_modules/**",
+      "**/*/dist/**",
+      "**/*/build/**",
+      "**/*/out/**",
+      "**/*/coverage/**",
+      "**/*/.next/**",
+      "**/*/.vercel/**",
+      "**/*/.serverless/**",
+      ".idea/*",
+      "**/*/pnpm-lock.yaml",
+      "**/*/package-lock.json",
+      "**/*/tsconfig.tsbuildinfo"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "correctness": {
+        "all": true,
+        "useImportExtensions": "off"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "off"
+      },
+      "recommended": true,
+      "suspicious": {
+        "all": true,
+        "useAwait": "off",
+        "noReactSpecificProps": "off",
+        "noExplicitAny": "off",
+        "noConfusingVoidType": "off",
+        "noArrayIndexKey": "off"
+      },
+      "style": {
+        "all": true,
+        "noDefaultExport": "off",
+        "noUselessElse": "off",
+        "noNonNullAssertion": "off",
+        "noImplicitBoolean": "off",
+        "useNamingConvention": "off",
+        "useBlockStatements": "off",
+        "useFilenamingConvention": "off"
+      },
+      "nursery": {
+        "all": true,
+        "useSortedClasses": "off",
+        "useExplicitType": "off",
+        "useImportRestrictions": "off",
+        "noNestedTernary": "off"
+      },
+      "performance": {
+        "all": true
+      },
+      "complexity": {
+        "all": true,
+        "noExcessiveCognitiveComplexity": "off",
+        "noForEach": "off",
+        "noVoid": "off",
+        "useSimplifiedLogicExpression": "off"
+      }
+    }
+  },
+  "javascript": {
+    "globals": ["React"],
+    "formatter": {
+      "arrowParentheses": "asNeeded",
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none",
+      "jsxQuoteStyle": "single"
+    }
+  }
+}
