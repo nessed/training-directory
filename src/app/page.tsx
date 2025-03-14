@@ -16,6 +16,7 @@ import {
   TableRow,
   Tooltip,
 } from "@heroui/react";
+
 import {
   BadgeCheck,
   Building,
@@ -254,7 +255,6 @@ export default function Home() {
                 className="text-gray-700 hover:bg-blue-200 odd:bg-white even:bg-gray-100"
                 key={index}
               >
-                {/* Expand Row */}
                 <TableCell className="text-left border-gray-200">
                   <div
                     onClick={() => toggleRow(index)}
@@ -280,7 +280,6 @@ export default function Home() {
                     />
                     <div className="flex flex-col">
                       {trainer.firstName} {trainer.lastName}
-                      {/* LinkedIn URL and icon */}
                       {expandedRow === index && trainer.linkedinUrl && (
                         <div className="flex items-center gap-2">
                           <a
@@ -299,7 +298,6 @@ export default function Home() {
 
                 {/* Profile */}
                 <TableCell className="text-left px-4 border-gray-200 relative py-2">
-                  {/* Collapsed Profile (One-Line Clamped) */}
                   {expandedRow !== index && (
                     <div className="flex items-center gap-2 text-gray-700">
                       <span className="font-medium line-clamp-1">
@@ -312,8 +310,6 @@ export default function Home() {
                       />
                     </div>
                   )}
-
-                  {/* Expanded Profile (Full Text) */}
                   {expandedRow === index && (
                     <div className="max-h-full opacity-100 py-2 visible">
                       <p className="text-gray-600">
@@ -326,7 +322,6 @@ export default function Home() {
                 {/* Education */}
                 <TableCell className="text-left px-4 border-gray-200">
                   <ul>
-                    {/* Slice logic for collapsed vs expanded */}
                     {expandedRow === index
                       ? trainer.education.map((edu, idx) => (
                           <li className="flex gap-2 py-1" key={idx}>
@@ -350,7 +345,6 @@ export default function Home() {
                 {/* Certifications */}
                 <TableCell className="text-left border-gray-200">
                   <ul>
-                    {/* Slice logic for collapsed vs expanded */}
                     {expandedRow === index
                       ? trainer.certifications.map((cert, idx) => (
                           <li
@@ -385,7 +379,6 @@ export default function Home() {
                 {/* Training Expertise */}
                 <TableCell className="text-left px-4 border-gray-200">
                   <ul>
-                    {/* Slice logic for collapsed vs expanded */}
                     {expandedRow === index
                       ? trainer.trainingExpertise.map((expertise, idx) => (
                           <li className="flex gap-2 py-1" key={idx}>
