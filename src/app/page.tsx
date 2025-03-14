@@ -22,7 +22,6 @@ import {
   ChevronDown,
   ClipboardCheck,
   GraduationCap,
-  Linkedin,
   Monitor,
   Search,
   X,
@@ -36,11 +35,7 @@ import { trainers } from "./data/trainers";
 
 // Tasks:
 // 1. Combine filteredByExpertise and searchedResults into a search function
-// 2. Remove backgrounds from icons
-// 3. Don't show URL for LinkedIn icon or any urls, should be a clickable icon
-// 4. The mouse shouldn't imply clickability (cursor-pointer) on the whole row
 // 5. Show total users on top left instead of WIP
-// 6. Remove the "Rows per page" dropdown
 // 7. Switch to Cursor
 export default function Home() {
   const [selectedExpertise, setSelectedExpertise] = useState(null);
@@ -169,48 +164,6 @@ export default function Home() {
           <div className="flex flex-row ">
             <div>Total:</div>
             <div> WIP users</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span>Rows per page:</span>
-            <Dropdown>
-              <DropdownTrigger>
-                <Button variant="flat" size="sm" className="font-semibold">
-                  wip <ChevronDown className="text-gray-500" size={16} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu className="text-gray-700">
-                <DropdownItem
-                  key="5"
-                  onClick={() => handleRowsPerPageChange(5)}
-                >
-                  5
-                </DropdownItem>
-                <DropdownItem
-                  key="10"
-                  onClick={() => handleRowsPerPageChange(10)}
-                >
-                  10
-                </DropdownItem>
-                <DropdownItem
-                  key="15"
-                  onClick={() => handleRowsPerPageChange(15)}
-                >
-                  15
-                </DropdownItem>
-                <DropdownItem
-                  key="20"
-                  onClick={() => handleRowsPerPageChange(20)}
-                >
-                  20
-                </DropdownItem>
-                <DropdownItem
-                  key="30"
-                  onClick={() => handleRowsPerPageChange(30)}
-                >
-                  30
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
           </div>
         </div>
 
