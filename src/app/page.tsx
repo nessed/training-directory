@@ -43,8 +43,9 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [expandedRow, setExpandedRow] = useState(null);
   const toggleRow = (index) => {
-    setExpandedRow(expandedRow === index ? null : index);
+    setExpandedRow((prev) => (prev === index ? null : index));
   };
+
   //contains all the expertise of all trainers, unduplicated
   const expertise = Array.from(
     new Set(
@@ -177,8 +178,7 @@ export default function Home() {
           className="w-full table-fixed overflow-y-visible "
         >
           <TableHeader className="w-screen text-md bg-white">
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4">
-            </TableColumn>
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4"></TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
               FULL NAME-{selectedExpertise}
             </TableColumn>
@@ -261,7 +261,7 @@ export default function Home() {
                     className="cursor-pointer flex items-center gap-2 text-gray-700 hover:text-blue-600 transition duration-200"
                   >
                     <ChevronDown
-                      className={`transition-transform duration-200 ${
+                      className={`transition-transform duration-300 ${
                         expandedRow === index ? "rotate-180" : ""
                       }`}
                     />
@@ -298,106 +298,137 @@ export default function Home() {
 
                 {/* Profile */}
                 <TableCell className="text-left px-4 border-gray-200 relative py-2">
-                  {expandedRow !== index && (
-                    <div className="flex items-center gap-2 text-gray-700">
-                      <span className="font-medium line-clamp-1">
-                        {trainer.professionalProfile}
-                      </span>
-                      <ChevronDown
-                        className={`transition-transform duration-1000 ${
-                          expandedRow === index ? "rotate-180" : ""
-                        }`}
-                      />
-                    </div>
-                  )}
-                  {expandedRow === index && (
-                    <div className="max-h-full opacity-100 py-2 visible">
+                  <div
+                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
+                      expandedRow === index
+                        ? "max-h-[400px] opacity-100 translate-y-0"
+                        : "max-h-12 opacity-100 translate-y-0"
+                    }`}
+                  >
+                    {expandedRow === index ? (
                       <p className="text-gray-600">
                         {trainer.professionalProfile}
                       </p>
-                    </div>
-                  )}
+                    ) : (
+                      <div className="flex items-center gap-2 text-gray-700">
+                        <span className="font-medium line-clamp-1">
+                          {trainer.professionalProfile}
+                        </span>
+                        <ChevronDown
+                          className={`transition-transform duration-300 ${
+                            expandedRow === index ? "rotate-180" : ""
+                          }`}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </TableCell>
 
                 {/* Education */}
                 <TableCell className="text-left px-4 border-gray-200">
-                  <ul>
-                    {expandedRow === index
-                      ? trainer.education.map((edu, idx) => (
-                          <li className="flex gap-2 py-1" key={idx}>
-                            <GraduationCap className="w-5 h-5 text-gray-600" />
-                            <span>
-                              {edu.degreeType} {edu.fieldOfStudy}
-                            </span>
-                          </li>
-                        ))
-                      : trainer.education.slice(0, 2).map((edu, idx) => (
-                          <li className="flex gap-2 py-1" key={idx}>
-                            <GraduationCap className="w-5 h-5 text-gray-600" />
-                            <span>
-                              {edu.degreeType} {edu.fieldOfStudy}
-                            </span>
-                          </li>
-                        ))}
-                  </ul>
+                  <div
+                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
+                      expandedRow === index
+                        ? "max-h-[400px] opacity-100 translate-y-0"
+                        : "max-h-[4.5rem] opacity-100 translate-y-0"
+                    }`}
+                  >
+                    <ul>
+                      {expandedRow === index
+                        ? trainer.education.map((edu, idx) => (
+                            <li className="flex gap-2 py-1" key={idx}>
+                              <GraduationCap className="w-5 h-5 text-gray-600" />
+                              <span>
+                                {edu.degreeType} {edu.fieldOfStudy}
+                              </span>
+                            </li>
+                          ))
+                        : trainer.education.slice(0, 2).map((edu, idx) => (
+                            <li className="flex gap-2 py-1" key={idx}>
+                              <GraduationCap className="w-5 h-5 text-gray-600" />
+                              <span>
+                                {edu.degreeType} {edu.fieldOfStudy}
+                              </span>
+                            </li>
+                          ))}
+                    </ul>
+                  </div>
                 </TableCell>
 
                 {/* Certifications */}
                 <TableCell className="text-left border-gray-200">
-                  <ul>
-                    {expandedRow === index
-                      ? trainer.certifications.map((cert, idx) => (
-                          <li
-                            className="flex items-center gap-2 py-1"
-                            key={idx}
-                          >
-                            <BadgeCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-900" />
-                            <span className="flex-grow">
-                              {cert.certificationName}
-                            </span>
-                            {cert.issuingOrganization && (
-                              <span className="ml-1 text-gray-500">
-                                - {cert.issuingOrganization}
+                  <div
+                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
+                      expandedRow === index
+                        ? "max-h-[400px] opacity-100 translate-y-0"
+                        : "max-h-[4.5rem] opacity-100 translate-y-0"
+                    }`}
+                  >
+                    <ul>
+                      {expandedRow === index
+                        ? trainer.certifications.map((cert, idx) => (
+                            <li
+                              className="flex items-center gap-2 py-1"
+                              key={idx}
+                            >
+                              <BadgeCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
+                              <span className="flex-grow">
+                                {cert.certificationName}
                               </span>
-                            )}
-                          </li>
-                        ))
-                      : trainer.certifications.slice(0, 2).map((cert, idx) => (
-                          <li
-                            className="flex items-center gap-2 py-1"
-                            key={idx}
-                          >
-                            <BadgeCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
-                            <span className="flex-grow">
-                              {cert.certificationName}
-                            </span>
-                          </li>
-                        ))}
-                  </ul>
+                              {cert.issuingOrganization && (
+                                <span className="ml-1 text-gray-500">
+                                  - {cert.issuingOrganization}
+                                </span>
+                              )}
+                            </li>
+                          ))
+                        : trainer.certifications
+                            .slice(0, 2)
+                            .map((cert, idx) => (
+                              <li
+                                className="flex items-center gap-2 py-1"
+                                key={idx}
+                              >
+                                <BadgeCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
+                                <span className="flex-grow">
+                                  {cert.certificationName}
+                                </span>
+                              </li>
+                            ))}
+                    </ul>
+                  </div>
                 </TableCell>
 
                 {/* Training Expertise */}
                 <TableCell className="text-left px-4 border-gray-200">
-                  <ul>
-                    {expandedRow === index
-                      ? trainer.trainingExpertise.map((expertise, idx) => (
-                          <li className="flex gap-2 py-1" key={idx}>
-                            <ClipboardCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
-                            <span>{expertise.name}</span>
-                            {expertise.otherInformation && (
-                              <span>: {expertise.otherInformation}</span>
-                            )}
-                          </li>
-                        ))
-                      : trainer.trainingExpertise
-                          .slice(0, 2)
-                          .map((expertise, idx) => (
+                  <div
+                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
+                      expandedRow === index
+                        ? "max-h-[400px] opacity-100 translate-y-0"
+                        : "max-h-[4.5rem] opacity-100 translate-y-0"
+                    }`}
+                  >
+                    <ul>
+                      {expandedRow === index
+                        ? trainer.trainingExpertise.map((expertise, idx) => (
                             <li className="flex gap-2 py-1" key={idx}>
                               <ClipboardCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
                               <span>{expertise.name}</span>
+                              {expertise.otherInformation && (
+                                <span>: {expertise.otherInformation}</span>
+                              )}
                             </li>
-                          ))}
-                  </ul>
+                          ))
+                        : trainer.trainingExpertise
+                            .slice(0, 2)
+                            .map((expertise, idx) => (
+                              <li className="flex gap-2 py-1" key={idx}>
+                                <ClipboardCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
+                                <span>{expertise.name}</span>
+                              </li>
+                            ))}
+                    </ul>
+                  </div>
                 </TableCell>
 
                 {/* Training Methods */}
