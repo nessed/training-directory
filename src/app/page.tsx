@@ -258,7 +258,7 @@ export default function Home() {
                 <TableCell className="text-left border-gray-200">
                   <div
                     onClick={() => toggleRow(index)}
-                    className="cursor-pointer flex items-center gap-2 text-gray-700 hover:text-blue-600 transition duration-200"
+                    className="cursor-pointer flex items gap-2 text-gray-700 hover:text-blue-600 transition duration-200"
                   >
                     <ChevronDown
                       className={`transition-transform duration-300 ${
