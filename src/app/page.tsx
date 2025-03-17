@@ -34,8 +34,6 @@ import { useState, useMemo } from "react";
 import { trainers } from "./data/trainers";
 
 // Tasks:
-// 1. Combine filteredByExpertise and searchedResults into a search function
-// 5. Show total users on top left instead of WIP
 // 7. Switch to Cursor
 export default function Home() {
   const [selectedExpertise, setSelectedExpertise] = useState(null);
