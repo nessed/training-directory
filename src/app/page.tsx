@@ -28,74 +28,114 @@ import {
   X,
 } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
-
 import { Plus } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { trainers } from "./data/trainers";
 
 // Tasks:
-// 1. Combine filteredByExpertise and searchedResults into a search function
-// 5. Show total users on top left instead of WIP
 // 7. Switch to Cursor
 export default function Home() {
   const [selectedExpertise, setSelectedExpertise] = useState(null);
   const [search, setSearch] = useState("");
   const [expandedRow, setExpandedRow] = useState(null);
+  const [selectedCertification, setSelectedCertification] = useState(null);
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value.trimStart());
+  };
+
   const toggleRow = (index) => {
     setExpandedRow((prev) => (prev === index ? null : index));
   };
 
-  //contains all the expertise of all trainers, unduplicated
+  // Extract unique expertise and certifications
   const expertise = Array.from(
     new Set(
       trainers.flatMap((trainer) =>
-        trainer.trainingExpertise.map((expertise) => expertise.name)
+        trainer.trainingExpertise.map((exp) => exp.name)
       )
     )
   );
 
-  const filteredByExpertise = selectedExpertise
-    ? trainers.filter((trainer) =>
-        trainer.trainingExpertise.some(
-          (expertise) => expertise.name === selectedExpertise
-        )
+  const certifications = Array.from(
+    new Set(
+      trainers.flatMap((trainer) =>
+        trainer.certifications.map((cert) => cert.certificationName)
       )
-    : trainers;
-
-  const handleSearch = (e) => {
-    setSearch(e.target.value.toLowerCase()); //ensures the data entered in search is entered in lowercase only
-  };
-
-  //checks searchedResults array for any matches with the search value
-  const searchedResults = filteredByExpertise.filter(
-    (trainer) =>
-      `${trainer.firstName} ${trainer.lastName}`
-        .toLowerCase()
-        .includes(search) ||
-      trainer.professionalProfile.toLowerCase().includes(search) ||
-      trainer.education.some((edu) =>
-        `${edu.degreeType} ${edu.fieldOfStudy}`.toLowerCase().includes(search)
-      ) ||
-      trainer.certifications.some((cert) =>
-        `${cert.certificationName} ${cert.issuingOrganization}`
-          .toLowerCase()
-          .includes(search)
-      ) ||
-      trainer.trainingExpertise.some((expertise) =>
-        expertise.name.toLowerCase().includes(search)
-      ) ||
-      trainer.trainingMethods.some((method) =>
-        method.name.toLowerCase().includes(search)
-      )
+    )
   );
 
-  //final array to be rendered to table
-  const trainersToDisplay = search ? searchedResults : filteredByExpertise; //if search has a value, it will display the searched results, else it will display the filtered results which contains either trainers full or filtered set
+  // Function to filter trainers based on selected filters & search term, current issue is search if you type omer customer also falls into omer
+  const getFilteredTrainers = () => {
+    let filtered = [...trainers];
+
+    if (selectedExpertise) {
+      //first it goes thruogh the expertise to see if its null or not, if it is then it wont change filtered array
+      filtered = filtered.filter((trainer) =>
+        trainer.trainingExpertise.some((expertise) =>
+          expertise.name.includes(selectedExpertise)
+        )
+      );
+    }
+
+    //this now checks through the modified array of just 10 trainers who have 'Quality' in their expertise
+    if (selectedCertification) {
+      //same as expertise logic, it only filters if certification exists and is found
+      filtered = filtered.filter((trainer) =>
+        trainer.certifications.some((certification) =>
+          certification.certificationName.includes(selectedCertification)
+        )
+      );
+    }
+
+    //now trainers is narrowed down to 4 trainers in the array
+    if (search.trim() !== "") {
+      //need to make trim more efficient so empty space cant be entered period
+      const searchLower = search.toLowerCase();
+
+      filtered = filtered.filter((trainer) => {
+        //filter applies on all 4 trainers. filter parameter is if search term exists in any of the other columns, it returns true for them and keeps them in the array
+        return (
+          `${trainer.firstName} ${trainer.lastName}`
+            .toLowerCase()
+            .includes(searchLower) ||
+          trainer.professionalProfile?.toLowerCase().includes(searchLower) ||
+          trainer.city?.toLowerCase().includes(searchLower) ||
+          trainer.education.some((edu) =>
+            `${edu.degreeType} ${edu.institution} ${edu.fieldOfStudy}`
+              .toLowerCase()
+              .includes(searchLower)
+          ) ||
+          trainer.certifications.some((cert) =>
+            `${cert.certificationName} ${cert.issuingOrganization}`
+              .toLowerCase()
+              .includes(searchLower)
+          ) ||
+          trainer.workExperience.some((exp) =>
+            `${exp.position} ${exp.organization}`
+              .toLowerCase()
+              .includes(searchLower)
+          ) ||
+          trainer.trainingExpertise.some((exp) =>
+            `${exp.name} ${exp.otherInformation || ""}`
+              .toLowerCase()
+              .includes(searchLower)
+          ) ||
+          trainer.trainingMethods.some((method) =>
+            `${method.name} ${method.otherInformation || ""}`
+              .toLowerCase()
+              .includes(searchLower)
+          )
+        );
+      });
+    }
+
+    return filtered;
+  } 
 
   return (
     <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
-      <div className="text-white"> HELLO</div>
       <div className="flex flex-col justify-between gap-2 px-10 p-2">
         <div className="w-full flex flex-row justify-between gap-2 p-1">
           <div className="w-full flex">
@@ -167,8 +207,7 @@ export default function Home() {
 
         <div className="flex flex-row justify-between gap-2 text-gray-400 font-light p-2 ">
           <div className="flex flex-row ">
-            <div>Total:</div>
-            <div> WIP users</div>
+            <div> Total: {getFilteredTrainers.length} {getFilteredTrainers.length ===1 ? "user": "users"} </div>
           </div>
         </div>
 
@@ -178,7 +217,9 @@ export default function Home() {
           className="w-full table-fixed overflow-y-visible "
         >
           <TableHeader className="w-screen text-md bg-white">
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4"></TableColumn>
+            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4">
+              {" "}
+            </TableColumn>
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
               FULL NAME-{selectedExpertise}
             </TableColumn>
@@ -192,7 +233,7 @@ export default function Home() {
             </TableColumn>
 
             <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
-              <Dropdown className="">
+              <Dropdown>
                 <DropdownTrigger>
                   <Button
                     size={"lg"}
@@ -203,9 +244,18 @@ export default function Home() {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu className="text-gray-700 max-h-32 overflow-y-auto">
-                  <DropdownItem className="" key="active">
-                    Active
-                  </DropdownItem>
+                  {certifications.map((cert, idx) => (
+                    <DropdownItem
+                      key={idx}
+                      onClick={() =>
+                        setSelectedCertification(
+                          selectedCertification === cert ? null : cert
+                        )
+                      }
+                    >
+                      {cert}
+                    </DropdownItem>
+                  ))}
                 </DropdownMenu>
               </Dropdown>
             </TableColumn>
@@ -249,7 +299,7 @@ export default function Home() {
           </TableHeader>
 
           <TableBody emptyContent={"No rows to display."}>
-            {trainersToDisplay.map((trainer, index) => (
+            {getFilteredTrainers().map((trainer, index) => (
               <TableRow
                 data-hover
                 className="text-gray-700 hover:bg-blue-200 odd:bg-white even:bg-gray-100"
