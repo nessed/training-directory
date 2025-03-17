@@ -44,7 +44,7 @@ export default function Home() {
   const [selectedCertification, setSelectedCertification] = useState(null);
 
   const handleSearch = (e) => {
-    setSearch(e.target.value);
+    setSearch(e.target.value.trimStart());
   };
 
   const toggleRow = (index) => {
@@ -69,7 +69,7 @@ export default function Home() {
   );
 
   // Function to filter trainers based on selected filters & search term, current issue is search if you type omer customer also falls into omer
-  const getFilteredTrainers = useMemo(() => {
+  const getFilteredTrainers = () => {
     let filtered = [...trainers];
 
     if (selectedExpertise) {
@@ -134,7 +134,7 @@ export default function Home() {
     }
 
     return filtered;
-  }, [selectedExpertise, selectedCertification, search]);
+  } 
 
   return (
     <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
@@ -301,7 +301,7 @@ export default function Home() {
           </TableHeader>
 
           <TableBody emptyContent={"No rows to display."}>
-            {getFilteredTrainers.map((trainer, index) => (
+            {getFilteredTrainers().map((trainer, index) => (
               <TableRow
                 data-hover
                 className="text-gray-700 hover:bg-blue-200 odd:bg-white even:bg-gray-100"
