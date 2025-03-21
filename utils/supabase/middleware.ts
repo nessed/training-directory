@@ -10,6 +10,7 @@ export const updateSession = async (request: NextRequest) => {
       request: {
         headers: request.headers,
       },
+
     });
 
     const supabase = createServerClient(

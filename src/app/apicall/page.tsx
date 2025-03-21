@@ -6,3 +6,4 @@ export default async function Instruments() {
 
   return <pre>{JSON.stringify(instruments, null, 2)}</pre>
 }
+
