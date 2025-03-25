@@ -1,5 +1,7 @@
 "use client";
 import avatar from "@/public/profilepicdefault.png";
+import { createClient } from "../../utils/supabase/server";
+
 import {
   Button,
   Dropdown,
@@ -132,7 +134,7 @@ export default function Home() {
     }
 
     return filtered;
-  } 
+  };
 
   return (
     <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
@@ -207,7 +209,11 @@ export default function Home() {
 
         <div className="flex flex-row justify-between gap-2 text-gray-400 font-light p-2 ">
           <div className="flex flex-row ">
-            <div> Total: {getFilteredTrainers.length} {getFilteredTrainers.length ===1 ? "user": "users"} </div>
+            <div>
+              {" "}
+              Total: {getFilteredTrainers.length}{" "}
+              {getFilteredTrainers.length === 1 ? "user" : "users"}{" "}
+            </div>
           </div>
         </div>
 
