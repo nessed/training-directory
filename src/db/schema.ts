@@ -47,3 +47,10 @@ export const trainingMethods = pgTable('training_methods', {
   name: text('name'),
   otherInformation: text('other_information'),
 });
+
+export const certifications = pgTable('certifications', {
+  id: serial('id').primaryKey(),
+  trainerId: integer('trainer_id').references(() => trainers.id, { onDelete: 'cascade' }),
+  certificationName: text('certification_name'),
+  issuingOrganization: text('issuing_organization'),
+});

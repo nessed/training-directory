@@ -1,14 +1,31 @@
+"use client"
 import { createClient } from "../../../utils/supabase/server";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
-export default async function TrainersDebug() {
-  const supabase = await createClient(); // ✅ no destructure
+export default function TrainersDebug() {
+  const [trainers, setTrainers] = useState([]);
+  const [error, setError] = useState("");
 
-  const { data: trainers, error } = await supabase
-    .from("trainers")
-    .select("id, first_name, last_name, city, title, image");
+  useEffect(() => {
+    const fetchTrainers = async () => {
+      try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+          .from("trainers")
+          .select("id, first_name, last_name, city, title, image");
 
-  if (error) return <p>{error.message}</p>;
+        if (error) throw new Error(error.message);
+        setTrainers(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchTrainers();
+  }, []);
+
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="p-4">
