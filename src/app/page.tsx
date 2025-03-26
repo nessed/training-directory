@@ -30,8 +30,8 @@ import {
 import { FaLinkedin } from "react-icons/fa";
 import { Plus } from "lucide-react";
 import Image from "next/image";
-import { useState, useMemo } from "react";
-import { trainers } from "./data/trainers";
+import { useState, useMemo, useEffect } from "react";
+import { createBrowserClient } from "@supabase/ssr";
 
 // Tasks:
 // 7. Switch to Cursor
@@ -40,6 +40,71 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [expandedRow, setExpandedRow] = useState(null);
   const [selectedCertification, setSelectedCertification] = useState(null);
+
+  const [trainers, setTrainers] = useState([]);
+  useEffect(() => {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    const fetchData = async () => {
+      const { data, error } = await supabase.from("trainers").select(`
+        *,
+        education (*),
+        training_expertise (*),
+        training_methods (*),
+        work_experience (*),
+        certifications (*)
+      `);
+      
+
+      if (error) {
+        console.error("Supabase error:", error);
+      } else {
+        const formatted = data.map((trainer) => ({
+          ...trainer,
+          firstName: trainer.first_name,
+          lastName: trainer.last_name,
+          professionalProfile: trainer.professional_profile,
+          linkedinUrl: trainer.linkedin_url,
+        
+          education: trainer.education?.map((edu) => ({
+            degreeType: edu.degree_type,
+            institution: edu.institution,
+            fieldOfStudy: edu.field_of_study,
+            country: edu.country,
+          })) || [],
+        
+          workExperience: trainer.work_experience?.map((work) => ({
+            position: work.position,
+            organization: work.organization,
+            dateStart: work.date_start,
+            dateEnd: work.date_end,
+            yearsOfExperience: work.years_of_experience,
+          })) || [],
+        
+          trainingExpertise: trainer.training_expertise?.map((exp) => ({
+            name: exp.name,
+            otherInformation: exp.other_information,
+          })) || [],
+        
+          trainingMethods: trainer.training_methods?.map((method) => ({
+            name: method.name,
+            otherInformation: method.other_information,
+          })) || [],
+        
+          certifications: trainer.certifications?.map((cert) => ({
+            certificationName: cert.certification_name,
+            issuingOrganization: cert.issuing_organization,
+          })) || [],
+        }));        
+
+        setTrainers(formatted);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSearch = (e) => {
     setSearch(e.target.value.trimStart());
@@ -132,7 +197,7 @@ export default function Home() {
     }
 
     return filtered;
-  } 
+  };
 
   return (
     <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
@@ -207,7 +272,11 @@ export default function Home() {
 
         <div className="flex flex-row justify-between gap-2 text-gray-400 font-light p-2 ">
           <div className="flex flex-row ">
-            <div> Total: {getFilteredTrainers.length} {getFilteredTrainers.length ===1 ? "user": "users"} </div>
+            <div>
+              {" "}
+              Total: {getFilteredTrainers().length}{" "}
+              {getFilteredTrainers.length === 1 ? "user" : "users"}{" "}
+            </div>
           </div>
         </div>
 
@@ -323,11 +392,12 @@ export default function Home() {
                   <div className="flex flex-row items-center gap-2">
                     <Image
                       className="rounded-lg"
-                      src={avatar}
+                      src={trainer.image || avatar}
                       alt="Avatar"
                       width={50}
                       height={50}
                     />
+
                     <div className="flex flex-col">
                       {trainer.firstName} {trainer.lastName}
                       {expandedRow === index && trainer.linkedinUrl && (
