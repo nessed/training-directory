@@ -117,7 +117,7 @@ export default function Home() {
 
         setTrainers(formatted);
       }
-      setLoading(false); // <- move this here
+      setLoading(false); 
     };
 
     fetchData();
@@ -218,11 +218,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-50 text-gray-800">
-      {/* <AppNavbar /> */}
       <div className="flex flex-col justify-between gap-2 px-10 p-2">
         <div className="flex flex-col gap-4 bg-white p-4 rounded-xl border-blue-100 mb-6">
           <div className="flex flex-wrap justify-between gap-0 items-center">
-            {/* Left: Search */}
             <Input
               placeholder="Search by name..."
               value={search}
@@ -232,7 +230,6 @@ export default function Home() {
               className="rounded-full text-xl w-full md:w-6/12 focus:ring-2 focus:ring-blue-500"
             />
 
-            {/* Right: Buttons */}
             <div className="flex flex-wrap gap-2 justify-end">
               {/* Status Dropdown */}
               <Dropdown>
