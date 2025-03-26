@@ -99,7 +99,7 @@ export default function Home() {
           })) || [],
         }));        
 
-        setTrainers(formatted); //
+        setTrainers(formatted);
       }
     };
 
