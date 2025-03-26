@@ -200,75 +200,66 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen max-w-screen bg-white lg:overflow-x-hidden lg:overflow-y-hidden ">
-      <div className="flex flex-col justify-between gap-2 px-10 p-2">
-        <div className="w-full flex flex-row justify-between gap-2 p-1">
-          <div className="w-full flex">
-            <Input
-              placeholder="Search by name..."
-              value={search}
-              onChange={handleSearch}
-              size={"lg"}
-              startContent={<Search className="text-gray-900" size={16} />}
-              className="rounded-lg focus:ring-2 text-xl focus:ring-blue-500 rounded-full w-8/12" // Set width to half
-            />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  size={"lg"}
-                  className="font- flex items-center bg-gray-200 shadow-md gap-2"
-                >
-                  Status
-                  <ChevronDown className="text-gray-500" size={100} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu className="text-gray-700">
-                <DropdownItem key="active">Active</DropdownItem>
-                <DropdownItem key="paused">Paused</DropdownItem>
-                <DropdownItem key="vacation">Vacation</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  size={"lg"}
-                  className="font- flex items-center gap-2 bg-gray-200 shadow-md gap-2"
-                >
-                  Columns
-                  <ChevronDown className="text-gray-500" size={100} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu className="text-gray-700">
-                <DropdownItem key="id">ID</DropdownItem>
-                <DropdownItem key="avatar">Avatar</DropdownItem>
-                <DropdownItem key="name">Name</DropdownItem>
-                <DropdownItem key="role">Role</DropdownItem>
-                <DropdownItem key="status">Status</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  size={"lg"}
-                  className="bg-blue-600 text-white font- flex items-center justify-center shadow-lg gap-2"
-                >
-                  Add User
-                  <Plus className="text-white" size={26} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu className="text-gray-700">
-                <DropdownItem key="add-new">Add New User</DropdownItem>
-                <DropdownItem key="import">Import Users</DropdownItem>
-                <DropdownItem key="export">Export Users</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
+    <div className="flex flex-col min-h-screen max-w-screen bg-gray-50 text-gray-800">
+    <div className="flex flex-col justify-between gap-2 px-10 p-2">
+      <div className="w-full flex flex-row justify-between gap-2 p-1">
+        <div className="w-full flex">
+          <Input
+            placeholder="Search by name..."
+            value={search}
+            onChange={handleSearch}
+            size="lg"
+            startContent={<Search className="text-blue-600" size={16} />}
+            className="rounded-full text-xl w-8/12 focus:ring-2 focus:ring-blue-500"
+          />
         </div>
+
+        <div className="flex items-center gap-2">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button size="lg" className="bg-blue-100 text-blue-800">
+                Status
+                <ChevronDown className="text-blue-600" size={100} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem key="active">Active</DropdownItem>
+              <DropdownItem key="paused">Paused</DropdownItem>
+              <DropdownItem key="vacation">Vacation</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+
+          <Dropdown>
+            <DropdownTrigger>
+              <Button size="lg" className="bg-blue-100 text-blue-800">
+                Columns
+                <ChevronDown className="text-blue-600" size={100} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem key="id">ID</DropdownItem>
+              <DropdownItem key="avatar">Avatar</DropdownItem>
+              <DropdownItem key="name">Name</DropdownItem>
+              <DropdownItem key="role">Role</DropdownItem>
+              <DropdownItem key="status">Status</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+
+          <Dropdown>
+            <DropdownTrigger>
+              <Button size="lg" className="bg-blue-600 text-white">
+                Add User
+                <Plus className="text-white" size={26} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem key="add-new">Add New User</DropdownItem>
+              <DropdownItem key="import">Import Users</DropdownItem>
+              <DropdownItem key="export">Export Users</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      </div>
 
         <div className="flex flex-row justify-between gap-2 text-gray-400 font-light p-2 ">
           <div className="flex flex-row ">
@@ -281,301 +272,187 @@ export default function Home() {
         </div>
 
         <Table
-          isHeaderSticky
-          isStriped
-          className="w-full table-fixed overflow-y-visible "
-        >
-          <TableHeader className="w-screen text-md bg-white">
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4">
-              {" "}
-            </TableColumn>
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
-              FULL NAME-{selectedExpertise}
-            </TableColumn>
-
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
-              PROFILE
-            </TableColumn>
-
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
-              EDUCATION
-            </TableColumn>
-
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button
-                    size={"lg"}
-                    className="text-left text-gray-600 bg-gray-200 font-medium text-md"
-                  >
-                    CERTIFICATIONS
-                    <ChevronDown className="text-gray-500" size={100} />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu className="text-gray-700 max-h-32 overflow-y-auto">
-                  {certifications.map((cert, idx) => (
-                    <DropdownItem
-                      key={idx}
-                      onClick={() =>
-                        setSelectedCertification(
-                          selectedCertification === cert ? null : cert
-                        )
-                      }
-                    >
-                      {cert}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            </TableColumn>
-
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-4 w-1/4">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button
-                    size={"lg"}
-                    className="text-left text-gray-600 bg-gray-200 font-medium text-md"
-                  >
-                    EXPERTISE
-                    {selectedExpertise && (
-                      <Button
-                        size="sm"
-                        onClick={() => setSelectedExpertise(null)}
-                        className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:ring-2 focus:ring-blue-300 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200 shadow-md"
-                      >
-                        <X />
-                      </Button>
-                    )}
-                    <ChevronDown className="text-gray-500" size={100} />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu className="text-gray-700 max-h-32 overflow-y-auto">
-                  {expertise.map((expertise, idx) => (
-                    <DropdownItem
-                      key={idx}
-                      onClick={() => setSelectedExpertise(expertise)}
-                    >
-                      {expertise}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            </TableColumn>
-
-            <TableColumn className="text-left text-gray-600 bg-gray-200 font-medium text-md pr-16 w-1/4">
-              TRAINING METHODS
-            </TableColumn>
-          </TableHeader>
-
-          <TableBody emptyContent={"No rows to display."}>
-            {getFilteredTrainers().map((trainer, index) => (
-              <TableRow
-                data-hover
-                className="text-gray-700 hover:bg-blue-200 odd:bg-white even:bg-gray-100"
-                key={index}
+  isHeaderSticky
+  isStriped
+  className="w-full table-fixed overflow-y-visible"
+>
+  <TableHeader className="w-screen text-md bg-blue-100">
+    <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4"> </TableColumn>
+    <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
+      FULL NAME-{selectedExpertise}
+    </TableColumn>
+    <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
+      PROFILE
+    </TableColumn>
+    <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
+      EDUCATION
+    </TableColumn>
+    <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
+      <Dropdown>
+        <DropdownTrigger>
+          <Button size="lg" className="text-blue-800 bg-blue-200 font-medium text-md">
+            CERTIFICATIONS
+            <ChevronDown className="text-indigo-500" size={100} />
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu className="text-blue-800 max-h-32 overflow-y-auto">
+          {certifications.map((cert, idx) => (
+            <DropdownItem key={idx} onClick={() => setSelectedCertification(selectedCertification === cert ? null : cert)}>
+              {cert}
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+    </TableColumn>
+    <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
+      <Dropdown>
+        <DropdownTrigger>
+          <Button size="lg" className="text-blue-800 bg-blue-200 font-medium text-md">
+            EXPERTISE
+            {selectedExpertise && (
+              <Button
+                size="sm"
+                onClick={() => setSelectedExpertise(null)}
+                className="bg-blue-700 hover:bg-blue-800 active:bg-blue-900 focus:ring-2 focus:ring-blue-400 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200 shadow-md"
               >
-                <TableCell className="text-left border-gray-200">
-                  <div
-                    onClick={() => toggleRow(index)}
-                    className="cursor-pointer flex items gap-2 text-gray-700 hover:text-blue-600 transition duration-200"
+                <X />
+              </Button>
+            )}
+            <ChevronDown className="text-indigo-500" size={100} />
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu className="text-blue-800 max-h-32 overflow-y-auto">
+          {expertise.map((expertise, idx) => (
+            <DropdownItem key={idx} onClick={() => setSelectedExpertise(expertise)}>
+              {expertise}
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+    </TableColumn>
+    <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-16 w-1/4">
+      TRAINING METHODS
+    </TableColumn>
+  </TableHeader>
+
+  <TableBody emptyContent="No rows to display.">
+    {getFilteredTrainers().map((trainer, index) => (
+      <TableRow
+        data-hover
+        className="text-blue-900 hover:bg-blue-50 odd:bg-white even:bg-slate-50 border-b border-blue-200"
+        key={index}
+      >
+        <TableCell className="text-left border-blue-200 text-slate-600">
+          <div
+            onClick={() => toggleRow(index)}
+            className="cursor-pointer flex items gap-2 text-slate-600 hover:text-blue-600 transition duration-200"
+          >
+            <ChevronDown className={`transition-transform duration-300 ${expandedRow === index ? 'rotate-180' : ''}`} />
+          </div>
+        </TableCell>
+
+        <TableCell className="text-left font-semibold px-4 border-blue-200">
+          <div className="flex flex-row items-center gap-2">
+            <Image className="rounded-lg" src={trainer.image || avatar} alt="Avatar" width={50} height={50} />
+            <div className="flex flex-col">
+              {trainer.firstName} {trainer.lastName}
+              {expandedRow === index && trainer.linkedinUrl && (
+                <div className="flex items-center gap-2">
+                  <a
+                    href={trainer.linkedinUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 hover:text-blue-800 transition-colors"
                   >
-                    <ChevronDown
-                      className={`transition-transform duration-300 ${
-                        expandedRow === index ? "rotate-180" : ""
-                      }`}
-                    />
-                  </div>
-                </TableCell>
+                    <FaLinkedin className="w-5 h-5 text-indigo-500" />
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </TableCell>
 
-                {/* Full Name */}
-                <TableCell className="text-left font-semibold px-4 border-gray-200">
-                  <div className="flex flex-row items-center gap-2">
-                    <Image
-                      className="rounded-lg"
-                      src={trainer.image || avatar}
-                      alt="Avatar"
-                      width={50}
-                      height={50}
-                    />
+        <TableCell className="text-left px-4 border-blue-200 relative py-2">
+          <div
+            className={`transition-all duration-500 ease-in-out overflow-hidden ${
+              expandedRow === index ? 'max-h-[400px] opacity-100 translate-y-0' : 'max-h-12 opacity-100 translate-y-0'
+            }`}
+          >
+            {expandedRow === index ? (
+              <p className="text-blue-700">{trainer.professionalProfile}</p>
+            ) : (
+              <div className="flex items-center gap-2 text-blue-800">
+                <span className="font-medium line-clamp-1">{trainer.professionalProfile}</span>
+                <ChevronDown
+                  className={`transition-transform duration-300 ${expandedRow === index ? 'rotate-180' : ''}`}
+                />
+              </div>
+            )}
+          </div>
+        </TableCell>
 
-                    <div className="flex flex-col">
-                      {trainer.firstName} {trainer.lastName}
-                      {expandedRow === index && trainer.linkedinUrl && (
-                        <div className="flex items-center gap-2">
-                          <a
-                            href={trainer.linkedinUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-gray-600 hover:text-blue-800 transition-colors"
-                          >
-                            <FaLinkedin className="w-5 h-5" />
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </TableCell>
-
-                {/* Profile */}
-                <TableCell className="text-left px-4 border-gray-200 relative py-2">
-                  <div
-                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                      expandedRow === index
-                        ? "max-h-[400px] opacity-100 translate-y-0"
-                        : "max-h-12 opacity-100 translate-y-0"
-                    }`}
-                  >
-                    {expandedRow === index ? (
-                      <p className="text-gray-600">
-                        {trainer.professionalProfile}
-                      </p>
-                    ) : (
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <span className="font-medium line-clamp-1">
-                          {trainer.professionalProfile}
-                        </span>
-                        <ChevronDown
-                          className={`transition-transform duration-300 ${
-                            expandedRow === index ? "rotate-180" : ""
-                          }`}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </TableCell>
-
-                {/* Education */}
-                <TableCell className="text-left px-4 border-gray-200">
-                  <div
-                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                      expandedRow === index
-                        ? "max-h-[400px] opacity-100 translate-y-0"
-                        : "max-h-[4.5rem] opacity-100 translate-y-0"
-                    }`}
-                  >
-                    <ul>
-                      {expandedRow === index
-                        ? trainer.education.map((edu, idx) => (
-                            <li className="flex gap-2 py-1" key={idx}>
-                              <GraduationCap className="w-5 h-5 text-gray-600" />
-                              <span>
-                                {edu.degreeType} {edu.fieldOfStudy}
-                              </span>
-                            </li>
-                          ))
-                        : trainer.education.slice(0, 2).map((edu, idx) => (
-                            <li className="flex gap-2 py-1" key={idx}>
-                              <GraduationCap className="w-5 h-5 text-gray-600" />
-                              <span>
-                                {edu.degreeType} {edu.fieldOfStudy}
-                              </span>
-                            </li>
-                          ))}
-                    </ul>
-                  </div>
-                </TableCell>
-
-                {/* Certifications */}
-                <TableCell className="text-left border-gray-200">
-                  <div
-                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                      expandedRow === index
-                        ? "max-h-[400px] opacity-100 translate-y-0"
-                        : "max-h-[4.5rem] opacity-100 translate-y-0"
-                    }`}
-                  >
-                    <ul>
-                      {expandedRow === index
-                        ? trainer.certifications.map((cert, idx) => (
-                            <li
-                              className="flex items-center gap-2 py-1"
-                              key={idx}
-                            >
-                              <BadgeCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
-                              <span className="flex-grow">
-                                {cert.certificationName}
-                              </span>
-                              {cert.issuingOrganization && (
-                                <span className="ml-1 text-gray-500">
-                                  - {cert.issuingOrganization}
-                                </span>
-                              )}
-                            </li>
-                          ))
-                        : trainer.certifications
-                            .slice(0, 2)
-                            .map((cert, idx) => (
-                              <li
-                                className="flex items-center gap-2 py-1"
-                                key={idx}
-                              >
-                                <BadgeCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
-                                <span className="flex-grow">
-                                  {cert.certificationName}
-                                </span>
-                              </li>
-                            ))}
-                    </ul>
-                  </div>
-                </TableCell>
-
-                {/* Training Expertise */}
-                <TableCell className="text-left px-4 border-gray-200">
-                  <div
-                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                      expandedRow === index
-                        ? "max-h-[400px] opacity-100 translate-y-0"
-                        : "max-h-[4.5rem] opacity-100 translate-y-0"
-                    }`}
-                  >
-                    <ul>
-                      {expandedRow === index
-                        ? trainer.trainingExpertise.map((expertise, idx) => (
-                            <li className="flex gap-2 py-1" key={idx}>
-                              <ClipboardCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
-                              <span>{expertise.name}</span>
-                              {expertise.otherInformation && (
-                                <span>: {expertise.otherInformation}</span>
-                              )}
-                            </li>
-                          ))
-                        : trainer.trainingExpertise
-                            .slice(0, 2)
-                            .map((expertise, idx) => (
-                              <li className="flex gap-2 py-1" key={idx}>
-                                <ClipboardCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-gray-600" />
-                                <span>{expertise.name}</span>
-                              </li>
-                            ))}
-                    </ul>
-                  </div>
-                </TableCell>
-
-                {/* Training Methods */}
-                <TableCell className="text-left px-4 border-gray-200 align-middle">
-                  <div className="flex gap-2 justify-start">
-                    {trainer.trainingMethods.map((method, idx) => (
-                      <Tooltip
-                        className="text-black"
-                        key={idx}
-                        content={<span>{method.name}</span>}
-                        placement="top"
-                      >
-                        <span>
-                          {method.name.toLowerCase() === "in-person" ? (
-                            <Building className="w-5 h-5 text-gray-600" />
-                          ) : method.name.toLowerCase() === "online" ? (
-                            <Monitor className="w-5 h-5 text-gray-600" />
-                          ) : null}
-                        </span>
-                      </Tooltip>
-                    ))}
-                  </div>
-                </TableCell>
-              </TableRow>
+        <TableCell className="text-left px-4 border-blue-200">
+          <ul>
+            {(expandedRow === index ? trainer.education : trainer.education.slice(0, 2)).map((edu, idx) => (
+              <li className="flex gap-2 py-1" key={idx}>
+                <GraduationCap className="w-5 h-5 text-indigo-500" />
+                <span className="text-slate-600">
+                  {edu.degreeType} {edu.fieldOfStudy}
+                </span>
+              </li>
             ))}
-          </TableBody>
-        </Table>
+          </ul>
+        </TableCell>
+
+        <TableCell className="text-left border-blue-200">
+          <ul>
+            {(expandedRow === index ? trainer.certifications : trainer.certifications.slice(0, 2)).map((cert, idx) => (
+              <li className="flex items-center gap-2 py-1" key={idx}>
+                <BadgeCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-indigo-500" />
+                <span className="flex-grow">{cert.certificationName}</span>
+                {cert.issuingOrganization && (
+                  <span className="ml-1 text-blue-600">- {cert.issuingOrganization}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </TableCell>
+
+        <TableCell className="text-left px-4 border-blue-200">
+          <ul>
+            {(expandedRow === index ? trainer.trainingExpertise : trainer.trainingExpertise.slice(0, 2)).map(
+              (expertise, idx) => (
+                <li className="flex gap-2 py-1" key={idx}>
+                  <ClipboardCheck className="max-w-5 max-h-5 min-w-5 min-h-5 text-indigo-500" />
+                  <span>{expertise.name}</span>
+                  {expertise.otherInformation && <span>: {expertise.otherInformation}</span>}
+                </li>
+              )
+            )}
+          </ul>
+        </TableCell>
+
+        <TableCell className="text-left px-4 border-blue-200 align-middle">
+          <div className="flex gap-2 justify-start">
+            {trainer.trainingMethods.map((method, idx) => (
+              <Tooltip key={idx} content={<span>{method.name}</span>} placement="top">
+                <span>
+                  {method.name.toLowerCase() === 'in-person' ? (
+                    <Building className="w-5 h-5 text-indigo-500" />
+                  ) : method.name.toLowerCase() === 'online' ? (
+                    <Monitor className="w-5 h-5 text-indigo-500" />
+                  ) : null}
+                </span>
+              </Tooltip>
+            ))}
+          </div>
+        </TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+
+
       </div>
       <Pagination
         key="secondary"
