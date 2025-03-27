@@ -52,33 +52,32 @@ export default function Home() {
   const [selectedCertification, setSelectedCertification] = useState(null);
 
   const [trainers, setTrainers] = useState([]);
-  useEffect(() => {
-    const supabase = createBrowserClient(
+  useEffect(() => { //useEffect used so that the data only makes a call to supabase on the first render rather than everytime theres a re render in the app. the dependency array is empty because we dont want it to re call async in general just once in the start
+    const supabase = createBrowserClient(  //supabase client is created with the url and anon key
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
     const fetchData = async () => {
-      setLoading(true);
-
-      const { data, error } = await supabase.from("trainers").select(`
+      setLoading(true); //loading state is set to true so that the skeleton loaders are shown as soon as async is called before await
+      //using sql type code to select all columns from the trainers table in the supabase db, their linked to trainers cuz thats the master table await just waits for the data to be fetched from supabase 
+      //data, error is just two values that can be for this function, data is the data fetched from the db and error is the error if there is one
+      const { data, error } = await supabase.from("trainers").select(` 
         *,
-        education (*),
+        education (*), 
         training_expertise (*),
         training_methods (*),
         work_experience (*),
         certifications (*)
-      `);
-
+      `); //we're using the exact names we used in the supabase db so that we can map the data to the correct keys in the object * means call all columns
       if (error) {
         console.error("Supabase error:", error);
-      } else {
+      } else { //formatted assigns local values to data from the db 
         const formatted = data.map((trainer) => ({
           ...trainer,
           firstName: trainer.first_name,
           lastName: trainer.last_name,
           professionalProfile: trainer.professional_profile,
-          linkedinUrl: trainer.linkedin_url,
-
+          linkedinUrl: trainer.linkedin_url, 
           education:
             trainer.education?.map((edu) => ({
               degreeType: edu.degree_type,
@@ -280,6 +279,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        
         <div className="h-[calc(100vh-200px)] overflow-y-auto w-full">
           <Table isStriped isHeaderSticky removeWrapper className="min-w-full">
             <TableHeader className="sticky bg-blue-100 shadow-sm rounded-t-xl">
@@ -287,15 +287,11 @@ export default function Home() {
                 {" "}
               </TableColumn>
               <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
-                FULL NAME-{selectedExpertise}
-              </TableColumn>
-              <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
-                PROFILE
+                Trainer
               </TableColumn>
               <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
                 EDUCATION
               </TableColumn>
-
               <TableColumn className="text-left text-blue-800 bg-blue-200 font-medium text-md pr-4 w-1/4">
                 <Dropdown>
                   <DropdownTrigger>
@@ -360,23 +356,14 @@ export default function Home() {
               </TableColumn>
             </TableHeader>
 
-            <TableBody
-              emptyContent={loading ? undefined : "No rows to display."}
-            >
-              {loading
-                ? [...Array(5)].map((_, index) => (
-                    <TableRow key={index} className="border-b border-blue-200">
+             <TableBody //empty content is a prop by nextui that renders an empty row value and we have conditionally rendered its value to be undefined if loading is true
+              emptyContent={loading ? undefined : "No rows to display."}>
+              {loading //if loading state is true then show skeleton loaders
+                ? [...Array(5)].map((_, index) => ( //first an empty array of 5 undefined elements is generated, then it is spread out to be turned to 5 arrays. these arrays serve as the number of rows the table cells below will appear
+                   //underscore is a placeholder for the current element in the array, index is the index of the current element
+                   <TableRow key={index} className="border-b border-blue-200">
                       <TableCell>
                         <Skeleton circle width={24} height={24} />
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Skeleton circle width={50} height={50} />
-                          <div className="flex flex-col gap-1">
-                            <Skeleton width={120} height={16} />
-                            <Skeleton width={80} height={12} />
-                          </div>
-                        </div>
                       </TableCell>
                       <TableCell>
                         <Skeleton count={1} height={22} />
@@ -396,9 +383,8 @@ export default function Home() {
                           <Skeleton circle width={20} height={20} />
                         </div>
                       </TableCell>
-                    </TableRow>
-                  ))
-                : getFilteredTrainers().map((trainer, index) => (
+                    </TableRow> ))
+                :  getFilteredTrainers().map((trainer, index) => ( //else if loading it renders the other version of rows 
                     <TableRow
                       data-hover
                       className="text-blue-900 hover:bg-blue-50 odd:bg-white even:bg-slate-50 border-b border-blue-200 animate-fade-in"
@@ -415,7 +401,7 @@ export default function Home() {
                         </div>
                       </TableCell>
 
-                      <TableCell className="text-left font-semibold px-4 border-blue-200">
+                      <TableCell className="text-left px-4 border-blue-200">
                         <div className="flex flex-row items-center gap-2">
                           <Image
                             className="rounded-lg"
@@ -424,7 +410,7 @@ export default function Home() {
                             width={50}
                             height={50}
                           />
-                          <div className="flex flex-col">
+                          <div className="flex flex-col font-semibold ">
                             {trainer.firstName} {trainer.lastName}
                             {expandedRow === index && trainer.linkedinUrl && (
                               <div className="flex items-center gap-2">
@@ -439,11 +425,7 @@ export default function Home() {
                               </div>
                             )}
                           </div>
-                        </div>
-                      </TableCell>
-
-                      <TableCell className="text-left px-4 border-blue-200 relative py-2 text-slate-600">
-                        <div
+                          <div
                           className={`transition-all duration-500 ease-in-out  ${
                             expandedRow === index
                               ? "max-h-[400px] opacity-100 translate-y-0"
@@ -455,8 +437,8 @@ export default function Home() {
                               {trainer.professionalProfile}
                             </p>
                           ) : (
-                            <div className="flex items-center gap-2 text-slate-600">
-                              <span className=" line-clamp-1">
+                            <div className="flex items-center gap-2 text-slate-600 font-medium">
+                              <span className=" line-clamp-3">
                                 {trainer.professionalProfile}
                               </span>
                               <ChevronDown
@@ -465,7 +447,10 @@ export default function Home() {
                             </div>
                           )}
                         </div>
+                        </div>
                       </TableCell>
+
+                    
 
                       <TableCell className="text-left px-4 border-blue-200 border-r border-l border-blue-100 pr-4">
                         <ul>
