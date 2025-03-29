@@ -3,13 +3,13 @@ import { Input, Button, Card, CardBody, CardHeader } from "@heroui/react";
 import { useState } from "react";
 import { createClient } from "../../../utils/supabase/client";
 
-export default function TrainersDebug() {
+export default function signUp() {
   const [form, setForm] = useState({
     email: "",
     password: "",
     fullName: ""
   });
-  const supabase = createClient();
+  const supabase = signUp();
 
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
