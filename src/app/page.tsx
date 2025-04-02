@@ -3,6 +3,7 @@ import { Input, Button, Card, CardBody, CardHeader } from "@heroui/react";
 import { useState } from "react";
 import { createClient } from "../../utils/supabase/client";
 import { useRouter } from "next/navigation";
+type InputEvent = React.ChangeEvent<HTMLInputElement>;
 
 export default function initialPage() {
   const [form, setForm] = useState({
@@ -14,9 +15,9 @@ export default function initialPage() {
   const supabase = createClient();
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e:InputEvent) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -24,7 +25,7 @@ export default function initialPage() {
   const handleSignin = async () => {
     setErrorMsg("");
     setSuccessMsg("");
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: form.email,
       password: form.password,
     });
@@ -33,17 +34,15 @@ export default function initialPage() {
     } else {
       setSuccessMsg("Logged in successfully.");
       setForm({ email: "", password: "" });
-      setIsLoggedIn(true)
+      // setIsLoggedIn(true)
       router.push("/table")
      }
   };
   const handleContinueAsGuest	= () => {
-    setIsLoggedIn(false)
+    // setIsLoggedIn(false)
     router.push("/table-non-login")
   }
   
-  console.log(isLoggedIn)
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md shadow-xl rounded-2xl">

@@ -15,13 +15,6 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
 } from "@heroui/react";
 import {
   BadgeCheck,
@@ -36,22 +29,22 @@ import {
 import { FaLinkedin } from "react-icons/fa";
 import { Plus } from "lucide-react";
 import Image from "next/image";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import AppNavbar from "@/components/navbar";
 
 // Tasks:
 // 7. Switch to Cursor
 export default function Home() {
-  const [loading, setLoading] = useState(true);
-  const [selectedExpertise, setSelectedExpertise] = useState(null);
-  const [search, setSearch] = useState("");
-  const [expandedRow, setExpandedRow] = useState(null);
-  const [selectedCertification, setSelectedCertification] = useState(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedExpertise, setSelectedExpertise] = useState<string | null>(null);
+  const [search, setSearch] = useState<string>("");
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
+  const [selectedCertification, setSelectedCertification] = useState<string | null>(null);
+  const [trainers, setTrainers] = useState<FormattedTrainer[]>([]);
 
-  const [trainers, setTrainers] = useState([]);
+
   useEffect(() => { //useEffect used so that the data only makes a call to supabase on the first render rather than everytime theres a re render in the app. the dependency array is empty because we dont want it to re call async in general just once in the start
     const supabase = createBrowserClient(  //supabase client is created with the url and anon key
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -72,14 +65,14 @@ export default function Home() {
       if (error) {
         console.error("Supabase error:", error);
       } else { //formatted assigns local values to data from the db 
-        const formatted = data.map((trainer) => ({
+        const formatted = data.map((trainer: Trainer) => ({
           ...trainer,
           firstName: trainer.first_name,
           lastName: trainer.last_name,
           professionalProfile: trainer.professional_profile,
           linkedinUrl: trainer.linkedin_url, 
           education:
-            trainer.education?.map((edu) => ({
+            trainer.education?.map((edu: Education) => ({
               degreeType: edu.degree_type,
               institution: edu.institution,
               fieldOfStudy: edu.field_of_study,
@@ -87,7 +80,7 @@ export default function Home() {
             })) || [],
 
           workExperience:
-            trainer.work_experience?.map((work) => ({
+            trainer.work_experience?.map((work: WorkExperience) => ({
               position: work.position,
               organization: work.organization,
               dateStart: work.date_start,
@@ -96,19 +89,19 @@ export default function Home() {
             })) || [],
 
           trainingExpertise:
-            trainer.training_expertise?.map((exp) => ({
+            trainer.training_expertise?.map((exp: TrainingExpertise) => ({
               name: exp.name,
               otherInformation: exp.other_information,
             })) || [],
 
           trainingMethods:
-            trainer.training_methods?.map((method) => ({
+            trainer.training_methods?.map((method: TrainingMethod) => ({
               name: method.name,
               otherInformation: method.other_information,
             })) || [],
 
           certifications:
-            trainer.certifications?.map((cert) => ({
+            trainer.certifications?.map((cert: Certification) => ({
               certificationName: cert.certification_name,
               issuingOrganization: cert.issuing_organization,
             })) || [],
@@ -122,13 +115,15 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const handleSearch = (e) => {
+
+  const handleSearch = (e:any) => {
     setSearch(e.target.value.trimStart());
   };
 
-  const toggleRow = (index) => {
+  const toggleRow = (index: number | null) => {
     setExpandedRow((prev) => (prev === index ? null : index));
   };
+
 
   // Extract unique expertise and certifications
   const expertise = Array.from(

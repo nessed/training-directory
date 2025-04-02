@@ -1,4 +1,4 @@
-import { db } from "./iEndex";
+import { db } from ".";
 import {
   trainers,
   education,
