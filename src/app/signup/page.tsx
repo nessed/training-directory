@@ -1,10 +1,13 @@
 "use client";
 import { Input, Button, Card, CardBody, CardHeader } from "@heroui/react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { createClient } from "../../../utils/supabase/client";
 type InputType = React.ChangeEvent<HTMLInputElement>;
 export default function SignUp() {
   const supabase = createClient();
+  const router = useRouter();
 
   const [form, setForm] = useState({
     email: "",
@@ -36,7 +39,10 @@ export default function SignUp() {
     }
 
   };
-
+  const pushToLogin = () => {
+    // setIsLoggedIn(false)
+    router.push("/");
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md shadow-xl rounded-2xl">
@@ -74,7 +80,7 @@ export default function SignUp() {
           {successMsg && <p className="text-green-600 text-sm text-center">{successMsg}</p>}
           <p className="text-center text-sm text-gray-600 mt-2">
             Already have an account?
-            <span className="text-blue-600 cursor-pointer hover:underline">Log In</span>
+            <span onClick={pushToLogin} className="text-blue-600 cursor-pointer hover:underline"> Log In</span>
           </p>
         </CardBody>
       </Card>

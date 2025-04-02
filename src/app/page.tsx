@@ -5,7 +5,7 @@ import { createClient } from "../../utils/supabase/client";
 import { useRouter } from "next/navigation";
 type InputEvent = React.ChangeEvent<HTMLInputElement>;
 
-export default function initialPage() {
+export default function InitialPage() {
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -15,40 +15,46 @@ export default function initialPage() {
   const supabase = createClient();
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleChange = (e:InputEvent) => {
+  const handleChange = (e: InputEvent) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
 
   const handleSignin = async () => {
     setErrorMsg("");
     setSuccessMsg("");
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: form.email,
       password: form.password,
     });
     if (error) {
       setErrorMsg(error.message);
+      console.log("User session:", data.session);
     } else {
       setSuccessMsg("Logged in successfully.");
+      console.log("User session:", data.session);
       setForm({ email: "", password: "" });
       // setIsLoggedIn(true)
-      router.push("/table")
-     }
+      router.push("/table");
+    }
   };
-  const handleContinueAsGuest	= () => {
+  const handleContinueAsGuest = () => {
     // setIsLoggedIn(false)
-    router.push("/table-non-login")
-  }
-  
+    router.push("/table-non-login");
+  };
+  const signUpRedirect = () => {
+    // setIsLoggedIn(false)
+    router.push("/signup");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md shadow-xl rounded-2xl">
         <CardHeader className="flex flex-col items-center justify-center gap-2 py-6">
           <h1 className="text-2xl font-semibold text-blue-700">Log in</h1>
-          <p className="text-sm text-gray-500">Register</p>
+          <p className="text-sm text-gray-500">Welcome back, please sign in</p>
         </CardHeader>
         <CardBody className="flex flex-col gap-4 px-6 pb-6">
           <Input
@@ -69,10 +75,18 @@ export default function initialPage() {
           />
           <div className="w-full flex justify-center">
             <div
-              className="inline-block hover:cursor-pointer hover:text-blue-600 transition-colors"
+              className="inline-block hover:cursor-pointer text-md text-blue-700 hover:underline transition-colors"
               onClick={handleContinueAsGuest}
             >
-              {`Continue without account?`}
+              Continue without account?
+            </div>
+          </div>
+          <div className="w-full flex justify-center">
+            <div
+              className="inline-block hover:cursor-pointer text-blue-700 hover:underline transition-colors text-md"
+              onClick={signUpRedirect}
+            >
+              Sign up
             </div>
           </div>
 
@@ -80,9 +94,9 @@ export default function initialPage() {
             color="primary"
             className="w-full mt-4"
             size="lg"
-            onClick={handleSignin}          >
+            onClick={handleSignin}
+          >
             Sign In
-
           </Button>
           {errorMsg && (
             <p className="text-red-600 text-sm text-center">{errorMsg}</p>
