@@ -1,5 +1,4 @@
 "use client";
-import avatar from "@/public/profilepicdefault.png";
 import {
   Button,
   Dropdown,
@@ -25,15 +24,17 @@ import {
   Monitor,
   Search,
   X,
+  Cog,
 } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
-import { Plus } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useRouter } from "next/navigation";
+import ErrorComp from "@/components/errorComp";
+
 // Tasks:
 // 7. Switch to Cursor
 export default function Home() {
@@ -255,8 +256,17 @@ export default function Home() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-50 text-gray-800">
         <div className="flex flex-col justify-between gap-2 px-10 p-2">
           <div className="flex flex-col gap-4 bg-white p-4 rounded-xl border-blue-100 mb-6">
-            <div className="flex flex-wrap justify-between gap-0 items-center">
-              <Button onPress={logState}>Log State</Button>
+            <div className="flex flex-wrap justify-between gap-0 items-center mainnavbar">
+              {/* <Button onPress={logState}>Log State</Button> */}
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/lmdahd.png"
+                  alt="LMDA Logo"
+                  width={130}
+                  height={50}
+                  className="object-contain hover:cursor-pointer"
+                />
+              </div>
               <Input
                 placeholder="Search by name..."
                 value={search}
@@ -265,10 +275,9 @@ export default function Home() {
                 startContent={<Search className="text-blue-600" size={16} />}
                 className="rounded-full text-xl w-full md:w-6/12 focus:ring-2 focus:ring-blue-500"
               />
-
               <div className="flex flex-wrap gap-2 justify-end">
                 {/* Status Dropdown */}
-                <Dropdown>
+                {/* <Dropdown>
                   <DropdownTrigger>
                     <Button size="lg" className="bg-blue-100 text-blue-800">
                       Status
@@ -280,10 +289,10 @@ export default function Home() {
                     <DropdownItem key="paused">Paused</DropdownItem>
                     <DropdownItem key="vacation">Vacation</DropdownItem>
                   </DropdownMenu>
-                </Dropdown>
+                </Dropdown> */}
 
                 {/* Columns Dropdown */}
-                <Dropdown>
+                {/* <Dropdown>
                   <DropdownTrigger>
                     <Button size="lg" className="bg-blue-100 text-blue-800">
                       Columns
@@ -297,31 +306,32 @@ export default function Home() {
                     <DropdownItem key="role">Role</DropdownItem>
                     <DropdownItem key="status">Status</DropdownItem>
                   </DropdownMenu>
-                </Dropdown>
+                </Dropdown> */}
 
-                {/* Add User */}
-                <Button
-                  size="lg"
-                  className="bg-blue-100 text-blue-800"
-                  onPress={async () => {
-                    await supabase.auth.signOut();
-                    console.log("Logged out");
-                    window.location.reload();
-                  }}
-                >
-                  Log Out
-                </Button>
+                {/* Cogwheel */}
                 <Dropdown>
                   <DropdownTrigger>
                     <Button size="lg" className="bg-blue-600 text-white">
-                      Add User
-                      <Plus className="text-white" size={26} />
+                      <Cog className="text-white" size={26} />
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu>
-                    <DropdownItem key="add-new">Add New User</DropdownItem>
-                    <DropdownItem key="import">Import Users</DropdownItem>
-                    <DropdownItem key="export">Export Users</DropdownItem>
+                    <DropdownItem
+                      onPress={() => router.push("/changeInfo")}
+                      key="change-info"
+                    >
+                      Change info
+                    </DropdownItem>
+                    <DropdownItem
+                      onPress={async () => {
+                        await supabase.auth.signOut();
+                        console.log("Logged out");
+                        router.push("/");
+                      }}
+                      key="logout"
+                    >
+                      Log Out
+                    </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
               </div>
@@ -471,12 +481,13 @@ export default function Home() {
                           <TableCell className="text-left px-4 border-blue-200">
                             <div className="flex flex-row items-center gap-2">
                               <Image
-                                className="rounded-lg"
-                                src={trainer.image || avatar}
+                                className="rounded-lg object-cover shadow-sm" 
+                                src={trainer.image || "/profilepicdefault.png"}
                                 alt="Avatar"
                                 width={50}
                                 height={50}
                               />
+
                               <div className="flex flex-col font-semibold ">
                                 {trainer.firstName} {trainer.lastName}
                                 {expandedRow === index &&
@@ -510,7 +521,7 @@ export default function Home() {
                                       {trainer.professionalProfile}
                                     </span>
                                     <ChevronDown
-                                      className={`transition-transform duration-300 ${expandedRow === index ? "rotate-180" : ""}`}
+                                      className={`transition-transform duration-300 ${expandedRow === index ? "rotate-180 text-blue-700" : "text-blue-500"}`}
                                     />
                                   </div>
                                 )}
@@ -617,34 +628,5 @@ export default function Home() {
       </div>
     );
   }
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-50 flex items-center justify-center">
-      <div className="bg-white p-10 rounded-3xl shadow-lg border border-blue-100 max-w-md w-full text-center space-y-6">
-        <h1 className="text-2xl font-bold text-blue-800">Access Restricted</h1>
-        <p className="text-gray-600 text-md">
-          Please login to continue and access the trainer dashboard.
-        </p>
-
-        <div className="space-y-3">
-          <Button
-            size="lg"
-            className="bg-blue-600 text-white w-full hover:bg-blue-700 transition-all"
-            onPress={logState}
-          >
-            Check Login Status {`(console)`}
-          </Button>
-
-          <Button
-            size="lg"
-            className="bg-blue-500 text-white w-full hover:bg-blue-600 transition-all"
-            onPress={() => {
-              router.push("/");
-            }}
-          >
-            Log In
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
+  return <ErrorComp />;
 }
