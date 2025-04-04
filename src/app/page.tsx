@@ -15,6 +15,7 @@ export default function InitialPage() {
   const supabase = createClient();
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -34,10 +35,12 @@ export default function InitialPage() {
   const handleSignin = async () => {
     setErrorMsg("");
     setSuccessMsg("");
+    setLoading(true)
     const { data, error } = await supabase.auth.signInWithPassword({
       email: form.email,
       password: form.password,
     });
+    setLoading(false)
     if (error) {
       setErrorMsg(error.message);
       console.log("User session:", data.session);
@@ -97,6 +100,8 @@ export default function InitialPage() {
             className="w-full mt-4"
             size="lg"
             onClick={handleSignin}
+            isLoading={loading} 
+      
           >
             Sign In
           </Button>

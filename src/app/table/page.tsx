@@ -363,6 +363,15 @@ export default function Home() {
                         className="text-blue-800 bg-blue-200 font-medium text-md"
                       >
                         CERTIFICATIONS
+                        {selectedCertification && (
+                          <Button
+                            size="sm"
+                            onClick={() => setSelectedCertification(null)}
+                            className="bg-blue-700 hover:bg-blue-800 active:bg-blue-900 focus:ring-2 focus:ring-blue-400 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200 shadow-md"
+                          >
+                            <X />
+                          </Button>
+                        )}
                         <ChevronDown className="text-indigo-500" size={100} />
                       </Button>
                     </DropdownTrigger>
@@ -481,7 +490,7 @@ export default function Home() {
                           <TableCell className="text-left px-4 border-blue-200">
                             <div className="flex flex-row items-center gap-2">
                               <Image
-                                className="rounded-lg object-cover shadow-sm" 
+                                className="rounded-lg object-cover shadow-sm"
                                 src={trainer.image || "/profilepicdefault.png"}
                                 alt="Avatar"
                                 width={50}

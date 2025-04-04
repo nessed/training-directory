@@ -11,10 +11,13 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "../../../utils/supabase/client";
+import { ArrowLeft } from "lucide-react";
+
 type InputType = React.ChangeEvent<HTMLInputElement>;
 export default function SignUp() {
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const supabase = createClient();
   const router = useRouter();
@@ -28,9 +31,11 @@ export default function SignUp() {
   const handleEmailChange = async () => {
     setSuccessMsg("");
     setErrorMsg("");
+    setLoading(true);
     const { error } = await supabase.auth.updateUser({
       email: form.email,
     });
+    setLoading(false);
     if (error) {
       setErrorMsg(error.message);
     } else {
@@ -45,6 +50,17 @@ export default function SignUp() {
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-50 text-gray-800 flex flex-col items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md flex justify-start p-2 mb-2">
+    <Button
+      isIconOnly
+      variant="light"
+      size="sm"
+      className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 transition"
+      onClick={() => router.push("/table")}
+    >
+      <ArrowLeft className="w-5 h-5" />
+    </Button>
+  </div>
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
         <h1 className="text-2xl font-bold text-blue-700 mb-6 text-center">
           Update Your Info
@@ -55,6 +71,7 @@ export default function SignUp() {
             onPress={() => setIsEmailOpen(true)}
             size="lg"
             className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition"
+
           >
             Change Email Address
           </Button>
@@ -77,7 +94,7 @@ export default function SignUp() {
 
                 )}
                 {errorMsg && (
-                    <p className="text-red-500 text-sm mt-2">{errorMsg}</p>
+                    <p className="text-red-500 text-sm mt-2 text-center">{errorMsg}</p>
                 )}
               <ModalFooter>
                 <Button variant="flat" onPress={() => setIsEmailOpen(false)}>
@@ -86,6 +103,8 @@ export default function SignUp() {
                 <Button
                   onPress={handleEmailChange}
                   className="bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition"
+                  isLoading={loading} 
+
                 >
                   Change Email
                 </Button>

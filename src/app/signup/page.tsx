@@ -17,6 +17,7 @@ export default function SignUp() {
 
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: InputType) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -25,11 +26,12 @@ export default function SignUp() {
   const handleSignup = async () => {
     setErrorMsg("");
     setSuccessMsg("");
-
+    setLoading(true);
     const { error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
     });
+    setLoading(false);
 
     if (error) {
       setErrorMsg(error.message);
@@ -74,6 +76,8 @@ export default function SignUp() {
             className="w-full mt-4"
             size="lg"
             onClick={handleSignup}
+            isLoading={loading} 
+
           >
             Sign Up
           </Button>
