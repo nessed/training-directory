@@ -2,9 +2,6 @@
 import {
   Input,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Modal,
   ModalContent,
   ModalHeader,
@@ -14,7 +11,6 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "../../../utils/supabase/client";
-import { useEffect } from "react";
 type InputType = React.ChangeEvent<HTMLInputElement>;
 export default function SignUp() {
   const [successMsg, setSuccessMsg] = useState("");
@@ -28,7 +24,6 @@ export default function SignUp() {
     fullName: "",
   });
   const [isEmailOpen, setIsEmailOpen] = useState(false);
-  const [isPasswordOpen, setIsPasswordOpen] = useState(false);
 
   const handleEmailChange = async () => {
     setSuccessMsg("");
@@ -97,12 +92,12 @@ export default function SignUp() {
               </ModalFooter>
             </ModalContent>
           </Modal>
-          <Button
+          {/* <Button
             size="lg"
             className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition"
           >
             Reset Password
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

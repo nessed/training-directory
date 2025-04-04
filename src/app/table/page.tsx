@@ -145,9 +145,9 @@ export default function Home() {
   }, []);
 
   console.log(loggedIn);
-  const logState = () => {
-    console.log(loggedIn);
-  };
+  // const logState = () => {
+  //   console.log(loggedIn);
+  // };
   const handleSearch = (e: any) => {
     setSearch(e.target.value.trimStart());
   };

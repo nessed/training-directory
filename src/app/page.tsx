@@ -22,20 +22,6 @@ export default function InitialPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleResetPassword = async () => {
-    setErrorMsg("");
-    setSuccessMsg("");
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://example.com/update-password",
-    });
-    if (error) {
-      setErrorMsg(error.message);
-    } else {
-      setSuccessMsg("Reset link sent successfully.");
-      setForm({ email: "", password: "" });
-    }
-  };
-
   const handleContinueAsGuest = () => {
     // setIsLoggedIn(false)
     router.push("/table-non-login");
@@ -117,7 +103,7 @@ export default function InitialPage() {
           <div className="w-full flex justify-center">
             <div
               className="inline-block hover:cursor-pointer text-blue-700 hover:underline transition-colors text-md"
-              onClick={handleResetPassword}
+              onClick={() => router.push("/passwordReset")}
             >
               Reset your password{" "}
             </div>
